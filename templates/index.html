@@ -8,9 +8,22 @@
 </head>
 
 <body>
-    <h1>
-        <a href="{% url 'home' %}">Home</a>
-    </h1>
+    <div style="display: flex;">
+        <h1>
+            <a href="{% url 'home' %}">Home</a>
+        </h1>
+        {% if request.user.is_authenticated %}
+        <h2>
+            <a href="#">{{request.user.username}}</a>
+        </h2>
+        {% else %}
+        <h2>
+            Not Logged In
+        </h2>
+        {% endif %}
+
+    </div>
+
     {% block content %} {% endblock %}
 
 </body>
