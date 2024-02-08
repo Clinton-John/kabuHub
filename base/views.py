@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
 from .models import User
+from .forms import EventForm
 # Create your views here.
 
 def home(request):
@@ -62,3 +63,8 @@ def loginPage(request):
 def logoutPage(request):
     logout(request)
     return redirect('home')
+
+def addEvent(request):
+   event_form = EventForm()
+   context = {'event_form':event_form}
+   return render(request, 'base/event_form.html', context)

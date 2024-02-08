@@ -1,10 +1,16 @@
 {% extends 'index.html' %} {% block content %}
+<div style="display:flex;">
+    <h3 style="padding-right: 50px;"><a href="{% url 'signup' %}">Sign up</a></h3>
+    <br>
+    <h3 style="padding-right: 50px;"><a href="{% url 'login' %}">Sign in</a></h3>
+    <br>
+    <h3 style="padding-right: 50px;"><a href="{% url 'logout' %}">Log Out</a></h3>
+</div>
 <div>
-    <h3><a href="{% url 'signup' %}">Sign up</a></h3>
-    <br>
-    <h3><a href="{% url 'login' %}">Sign in</a></h3>
-    <br>
-    <h3><a href="{% url 'logout' %}">Log Out</a></h3>
+    <h2>
+        Add Events section
+    </h2>
+    <a href="{% url 'add_event' %}">Add Event</a>
 </div>
 
 {% endblock %}
