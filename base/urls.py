@@ -1,6 +1,9 @@
 from django.urls import path
 from .import views
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('', views.home , name="home"),
@@ -10,5 +13,9 @@ urlpatterns = [
     path('logout/', views.logoutPage , name="logout"),
 
     path('addEvent/', views.addEvent , name="add_event"),
+    path('userProfile/', views.userProfile , name="user_profile"),
+    path('updateProfile/', views.updateProfile , name="update_profile"),
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

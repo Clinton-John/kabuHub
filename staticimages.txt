@@ -1,0 +1,26 @@
+create a folder static and in static create a css,js and an images field.
+in the settings.py ----->
+   STATICFILES_DIRS = STATICFILES_DIRS =[
+   os.path.join(BASE_DIR, 'static')
+]
+home.html ---> {% load static %}
+               <link rel="stylesheet" type="text/css" href="{% static '/css/index.css' %}">
+
+to handle the images add the following in the 
+ settings.py ----->
+      MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')#all images to be submited to the static , images
+      MEDIA_URL = '/images/'
+to make the urls aware of the uploaded images then in the base.py file and in the 
+   base -> urls.py ------->
+       from django.conf.urls.static import static
+       from django.conf import settings
+
+       urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+in the .html add the following line of code to make the image visible to anyone 
+ <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt=""> 
+ #the image should now be displayed to the screen
+ in the form that submits the image add the following line thats 
+     <form action="" method="POST" enctype="multipart/form-data">
+in the views.py file add the following  lines of codes:
+    if request.method == 'POST':
+      update_form = UserProfileForm(request.POST,request.FILES, instance=user) #this allows the  user to upload an image

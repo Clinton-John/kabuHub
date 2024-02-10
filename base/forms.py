@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from .models import Event
+from .models import Event , Profile, User
 
 class MyUserCreationForm(UserCreationForm):
     class Meta:
@@ -12,3 +12,9 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         fields ='__all__'
+        exclude = ['created_by']
+
+class UserProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ['user'] 

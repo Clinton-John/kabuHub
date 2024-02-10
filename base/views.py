@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
-from .models import User
-from .forms import EventForm
+from .models import User , Event
+from .forms import EventForm , UserProfileForm
 # Create your views here.
 
 def home(request):
@@ -66,5 +66,32 @@ def logoutPage(request):
 
 def addEvent(request):
    event_form = EventForm()
+   if request.method == 'POST':
+
+      Event.objects.create(
+         created_by = request.user,
+         title = request.POST.get('title'),
+         date = request.POST.get('date'),
+         description = request.POST.get('description')
+
+      )
+      return redirect('home')
+
    context = {'event_form':event_form}
    return render(request, 'base/event_form.html', context)
+def userProfile(request):
+   return render(request, 'base/profile.html')
+
+
+def updateProfile(request):
+   user = request.user
+   update_form = UserProfileForm(instance=user)
+   if request.method == 'POST':
+      form = UserProfileForm(request.POST,request.FILES, instance=user)
+      if form.is_valid():
+         form.save()
+      
+
+ 
+   context = {'update_form':update_form}
+   return render(request,'base/update_profile.html', context)

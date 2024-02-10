@@ -1,0 +1,8 @@
+{% extends 'index.html' %} {% block content %}
+<div>
+    <h2>
+        the user profile
+    </h2>
+    <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt="">
+</div>
+{% endblock %}
