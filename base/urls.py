@@ -13,7 +13,7 @@ urlpatterns = [
     path('logout/', views.logoutPage , name="logout"),
 
     path('addEvent/', views.addEvent , name="add_event"),
-    path('userProfile/', views.userProfile , name="user_profile"),
+    path('userProfile/<str:pk>/', views.userProfile , name="user_profile"),
     path('updateProfile/', views.updateProfile , name="update_profile"),
 
 ]

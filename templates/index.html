@@ -17,7 +17,7 @@
         </h1>
         {% if request.user.is_authenticated %}
         <h2>
-            <a href="{% url 'user_profile' %}">{{request.user.username}}</a>
+            <a href="{% url 'user_profile' request.user.id %}">{{request.user.username}}</a>
         </h2>
         {% else %}
         <h2>

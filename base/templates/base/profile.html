@@ -3,6 +3,13 @@
     <h2>
         the user profile
     </h2>
+    {{user.username}}
+    <h2>Events Uploaded by the user</h2>
+    {% for event in events %}
+    <ul>
+        <li>{{event}}</li>
+    </ul>
+    {% endfor %}
     <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt="">
 </div>
 {% endblock %}

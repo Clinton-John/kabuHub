@@ -5,10 +5,14 @@ from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
 from .models import User , Event
 from .forms import EventForm , UserProfileForm
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def home(request):
-    return render(request , 'base/home.html')
+   events = Event.objects.all()
+   context = {'events':events}
+   return render(request , 'base/home.html', context)
 
 def signup(request):
     page = 'signup'
@@ -64,6 +68,7 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
+@login_required(login_url='login')
 def addEvent(request):
    event_form = EventForm()
    if request.method == 'POST':
@@ -79,8 +84,12 @@ def addEvent(request):
 
    context = {'event_form':event_form}
    return render(request, 'base/event_form.html', context)
-def userProfile(request):
-   return render(request, 'base/profile.html')
+
+def userProfile(request, pk):
+   user = User.objects.get(id=pk)
+   events = user.event_set.all()
+   context = {'user':user, 'events':events}
+   return render(request, 'base/profile.html', context)
 
 
 def updateProfile(request):
