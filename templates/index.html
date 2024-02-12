@@ -5,30 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sports center</title>
+    <title>KABU HUB </title>
     <link rel="text/css" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/index.css' %}">
 </head>
 
 <body>
-    <div style="display:flex;">
-        <h1 style="padding-right: 70px;">
-            <a href="{% url 'home' %}">Home</a>
-        </h1>
-        {% if request.user.is_authenticated %}
-        <h2>
-            <a href="{% url 'user_profile' request.user.id %}">{{request.user.username}}</a>
-        </h2>
-        {% else %}
-        <h2>
-            Not Logged In
-        </h2>
-        {% endif %}
+    {% include 'navbar.html' %} {% block content %} {% endblock %}
 
-    </div>
-
-    {% block content %} {% endblock %}
-
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 
 </html>
