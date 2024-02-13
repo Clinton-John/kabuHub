@@ -99,8 +99,9 @@ def updateProfile(request):
       form = UserProfileForm(request.POST,request.FILES, instance=user)
       if form.is_valid():
          form.save()
+         return redirect('user-profile' , pk=user.id)
       
 
  
    context = {'update_form':update_form}
-   return render(request,'base/update_profile.html', context)
+   return render(request,'base/update_profile_new.html', context)
