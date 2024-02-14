@@ -6,6 +6,7 @@ from django.contrib.auth import login , authenticate , logout
 from .models import User , Event
 from .forms import EventForm , UserProfileForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -105,3 +106,26 @@ def updateProfile(request):
  
    context = {'update_form':update_form}
    return render(request,'base/update_profile_new.html', context)
+
+@login_required(login_url='login')
+def deleteEvent(request, pk):
+   event = Event.objects.get(id=pk)
+
+   if request.user != event.created_by:
+      return HttpResponse("you cant update the room !!!") 
+
+   if request.method == 'POST':
+      event.delete()
+      return  redirect('home')
+
+   return render(request, 'base/delete.html' , {'obj' :event})
+
+@login_required(login_url='login')
+def deleteUser(request, pk):
+   user = user.objects.get(id=pk)
+
+   if request.method == 'POST':
+      user.delete()
+      return  redirect('home')
+
+   return render(request, 'base/delete.html' , {'obj' :user})

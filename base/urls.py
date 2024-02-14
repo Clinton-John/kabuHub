@@ -16,6 +16,10 @@ urlpatterns = [
     path('userProfile/<str:pk>/', views.userProfile , name="user_profile"),
     path('updateProfile/', views.updateProfile , name="update_profile"),
 
+    path('deleteEvent/<str:pk>/', views.deleteEvent , name="delete_event"),
+    path('deleteEvent/<str:pk>/', views.deleteUser , name="delete_user"),
+
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

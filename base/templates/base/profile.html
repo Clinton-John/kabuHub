@@ -10,6 +10,10 @@
         <li>{{event}}</li>
     </ul>
     {% endfor %}
-    <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt="">
+    <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt=""> {% if request.user == user.id %}
+    <div>
+        <a href="{% url 'delete_user' request.user.id %}">Delete Account</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
