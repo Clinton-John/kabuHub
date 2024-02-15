@@ -19,6 +19,10 @@ urlpatterns = [
     path('deleteEvent/<str:pk>/', views.deleteEvent , name="delete_event"),
     path('deleteEvent/<str:pk>/', views.deleteUser , name="delete_user"),
 
+    path('adminsPage/', views.adminsPage ,  name="admins_page"),
+    path('changeRole/', views.changeRole ,  name="change_role"),
+
+
 
 ]
 

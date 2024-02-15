@@ -1,0 +1,22 @@
+{% extends "index.html" %} {% block content %}
+
+<div class="admins_page">
+    <h1>The League Admins Page</h1>
+    <div class="top_navbar">
+        <h2>
+            <a href="{% url 'change_role' %}">Add an Admin</a>
+        </h2>
+    </div>
+
+    <p>The available admins are</p>
+    <ul>
+        {% for user in group_users %}
+        <li>{{user.username}}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+</div>
+{% endblock %}

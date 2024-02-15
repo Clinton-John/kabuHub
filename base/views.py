@@ -7,16 +7,23 @@ from .models import User , Event
 from .forms import EventForm , UserProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
 def home(request):
    events = Event.objects.all()
-   context = {'events':events}
+   group = Group.objects.get(name='super_admin')
+   group_users = group.user_set.all()
+   context = {'events':events, 'group_users':group_users}
    return render(request , 'base/home.html', context)
 
 def signup(request):
     page = 'signup'
+
+    if request.user.is_authenticated:
+      return redirect('home')
+
     form = MyUserCreationForm()
     
     if request.method == 'POST':
@@ -25,6 +32,10 @@ def signup(request):
          user = form.save(commit=False)
          user.username = user.username.lower()
          user.save()
+
+         group = Group.objects.get(name='Students')
+         user.groups.add(group)
+
          login(request, user)
          return redirect('home')
       else:
@@ -129,3 +140,34 @@ def deleteUser(request, pk):
       return  redirect('home')
 
    return render(request, 'base/delete.html' , {'obj' :user})
+
+def adminsPage(request):
+    group = Group.objects.get(name='super_admin')
+    group_users = group.user_set.all()
+    
+    context = {'group_users':group_users}
+    return render(request , 'base/admins_page.html' , context)
+
+
+def changeRole(request):
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except:
+            HttpResponse("User with the provided email doesnt exist")
+    
+        users_group = Group.objects.get(name='Students')
+        if users_group not in user.groups.all():
+            return HttpResponse("The user isnt registered in the website")
+            
+        user.groups.remove(users_group)
+
+        admin_group = Group.objects.get(name='Admins')
+        user.groups.add(admin_group)
+
+        return redirect('admins_page')
+
+    context = {}
+    return render(request , 'base/change_role.html' , context)
