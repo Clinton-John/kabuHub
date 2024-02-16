@@ -35,15 +35,17 @@ def signup(request):
 
          group = Group.objects.get(name='Students')
          user.groups.add(group)
+         username = form.cleaned_data.get('username')
+         messages.success(request, f'Account successfully created for {username}')
 
          login(request, user)
          return redirect('home')
-      else:
-         messages.error(request , 'An error has occured during registration')
+      # else:
+      #    messages.error(request , 'An error has occured during registration')
 
 
     context = {'page':page, 'form':form}
-    return render(request , 'base/login_register.html', context)
+    return render(request , 'base/login_register_new.html', context)
 
 def loginPage(request):
    page = 'login'
