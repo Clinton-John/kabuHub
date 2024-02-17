@@ -21,7 +21,7 @@ class Profile(models.Model):
     profile_pic = models.ImageField(default="avatar.svg", null=True , blank=True)
 
     def  __str__(self):
-        return self.name
+        return self.username
     
 
 
