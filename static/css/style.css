@@ -482,6 +482,43 @@ a {
 
 
 /*==============================
+=>  Footer
+================================*/
+
+.footer_container {
+    background-color: red;
+}
+
+.sp_footer {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 70px;
+    width: 100%;
+    /* should have the header color */
+    background-color: #f0f0f0;
+    border: 1px solid;
+}
+
+@media screen and (max-width: 900px) {
+    .sp_footer {
+        flex-direction: column;
+        align-items: center;
+    }
+    .section1 {
+        flex-basis: 25%;
+    }
+    .section2 {
+        flex-basis: 50%;
+    }
+    .section3 {
+        display: none;
+    }
+}
+
+
+/*==============================
 =>  Topics
 ================================*/
 

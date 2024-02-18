@@ -25,7 +25,7 @@ urlpatterns = [
     path('changeRole/', views.changeRole ,  name="change_role"),
 
       #email configuration and password reset section
-    path('resetPassword/', auth_views.PasswordResetView.as_view(), name="reset_password" ),
+    path('resetPassword/', auth_views.PasswordResetView.as_view(template_name='base/password_reset.html'), name="reset_password" ),
     path('resetPasswordSent/', auth_views.PasswordResetDoneView.as_view(),name="password_reset_done" ),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
     path('resetPasswordComplete/', auth_views.PasswordResetConfirmView.as_view(),name="password_reset_confirm"),
