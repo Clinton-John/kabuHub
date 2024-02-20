@@ -1218,3 +1218,39 @@ a {
     color: var(--color-main);
     font-weight: 1.4rem;
 }
+
+
+/*==============================
+=>  Event section
+================================*/
+
+.image-container1 {
+    display: inline-block;
+}
+
+.container1 {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.container1::-webkit-scrollbar {
+    display: none;
+}
+
+.image-container1 {
+    display: inline-block;
+}
+
+.image-wrap {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+}
+
+.image-wrap img {
+    width: 200px;
+    height: 200px;
+}
