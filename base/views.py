@@ -173,3 +173,9 @@ def changeRole(request):
 
     context = {}
     return render(request , 'base/change_role.html' , context)
+
+def viewEvent(request, pk):
+   event = Event.objects.get(id=pk)
+   context = {'event':event}
+   return render(request, 'base/event.html', context)
+

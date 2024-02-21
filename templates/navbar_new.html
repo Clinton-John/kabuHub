@@ -5,9 +5,12 @@
             <img src="assets/logo.svg" />
             <h1>KabuHub</h1>
         </a>
-        <a href="/" class="header__logo">
-            <h1>Communites</h1>
+        {% if request.user in group_users %}
+        <a href="{% url 'admins_page' %}" class="header__logo">
+            <h1>Admins Page</h1>
         </a>
+        {% endif %}
+
         <!-- <form class="header__search">
             <label>
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
@@ -24,7 +27,7 @@
             {% if not request.user.is_authenticated %}
             <a href="{% url 'login' %}">
                 <img src="{% static 'images/avatar.svg' %}" />
-                <p>Login</p>
+                <p>Signin</p>
             </a>
             {% else %}
             <!-- Logged In -->

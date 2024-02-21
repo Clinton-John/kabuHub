@@ -1,0 +1,11 @@
+{% extends 'index.html' %}{% block content %}
+<div>
+    <h1>Specific Event section</h1>
+    <h2>{{event.title}} upcoming on date {{event.date}} </h2>
+    <p>Event posted By: <a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a>
+    </p>
+    <p>event posted at: {{event.created}}</p>
+
+    <p>{{event.description}}</p>
+</div>
+{% endblock %}
