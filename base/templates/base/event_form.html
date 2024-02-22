@@ -1,7 +1,7 @@
 {% extends 'index.html' %}{% block content %}
 <div>
     <h2>Add Events form</h2>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %} {{ event_form.as_p }}
         <input type="submit" value="Submit">
     </form>

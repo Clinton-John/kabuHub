@@ -24,7 +24,8 @@
     {% for event in events %}
     <h4>Posted By: <b><a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a></b></h4>
     <h2>{{event.title}}</h2>
-    <img class="event_pic" src="{{event_pic.url}}" alt="">
+    <img class="profile_pic" src="{{event_pic.url}}" alt="">
+
     <a href="{% url 'view_event' event.id %}">
         <h3>{{event.description}}</h3>
     </a>

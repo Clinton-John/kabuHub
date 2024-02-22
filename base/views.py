@@ -82,22 +82,41 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
+# @login_required(login_url='login')
+# def addEvent(request):
+#    event_form = EventForm()
+#    if request.method == 'POST':
+#       form = EventForm(request.POST,request.FILES)
+#       if form.is_valid():
+#          Event.objects.create(
+#             created_by = request.user,
+#             title = request.POST.get('title'),
+#             event_pic = request.POST.get('event_pic'),
+#             date = request.POST.get('date'),
+#             description = request.POST.get('description')
+#          )
+
+#       return redirect('home')
+
+#    context = {'event_form':event_form}
+#    return render(request, 'base/event_form.html', context)
+def addEvent(request):
+   eventform = EventForm()
+   return render(request, 'base/event_form.html', context)
 @login_required(login_url='login')
 def addEvent(request):
-   event_form = EventForm()
-   if request.method == 'POST':
+    event_form = EventForm()
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            event_instance = form.save(commit=False)
+            event_instance.created_by = request.user
+            event_instance.save()
+            return redirect('home')
 
-      Event.objects.create(
-         created_by = request.user,
-         title = request.POST.get('title'),
-         date = request.POST.get('date'),
-         description = request.POST.get('description')
+    context = {'event_form': event_form}
+    return render(request, 'base/event_form.html', context)
 
-      )
-      return redirect('home')
-
-   context = {'event_form':event_form}
-   return render(request, 'base/event_form.html', context)
 
 def userProfile(request, pk):
    user = User.objects.get(id=pk)
