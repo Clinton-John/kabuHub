@@ -24,3 +24,20 @@ in the .html add the following line of code to make the image visible to anyone
 in the views.py file add the following  lines of codes:
     if request.method == 'POST':
       update_form = UserProfileForm(request.POST,request.FILES, instance=user) #this allows the  user to upload an image
+
+ERROR -- The 'event_pic' attribute has no file associated with it.
+The above error occurs becuase in some fields of the field image there is no url that can be rendered. this happens when a user posting about an event fails to produce an image regarding the event he/she is posting
+To solve the above error, use the following method
+ 1. define a new function in the Event function (imageURL) that will be used to query the url and if it doesnt exists sets the url to an empty url string
+
+class Event(models.Model):
+  .....
+   @property  #this decorator allows us to access the images below as an attribute rather than a decorater
+   @propertY
+    def imageURL(self):
+        try:
+            url = self.event_pic.url
+        except:
+            url = ''
+        return url
+ 2. to render the images to the template, you need to use the following method to view the image

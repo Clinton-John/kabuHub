@@ -1,4 +1,4 @@
-{% extends 'index.html' %} {% block content %}
+ {% extends 'index.html' %} {% load static %}{% block content %}
 <div style="display:flex;">
     <h3 style="padding-right: 50px;"><a href="{% url 'signup' %}">Sign up</a></h3>
     <br> {% if request.user.is_authenticated %}
@@ -15,6 +15,7 @@
     </h2>
     <a href="{% url 'add_event' %}">Add Event</a>
 </div>
+
 <div>
     <hr> {% for message in messages %}
     <p>{{message}}</p>
@@ -24,7 +25,9 @@
     {% for event in events %}
     <h4>Posted By: <b><a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a></b></h4>
     <h2>{{event.title}}</h2>
-    <img class="profile_pic" src="{{event_pic.url}}" alt="">
+    <img src="{{event.imageURL}}" style="width: 100px;">
+    <p>Date: {{event.date}}</p>
+    <p>Location: {{event.location}}</p>
 
     <a href="{% url 'view_event' event.id %}">
         <h3>{{event.description}}</h3>
