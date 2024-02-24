@@ -1,6 +1,7 @@
 {% extends 'index.html' %} {% block content %}
 <div class="change_role">
     <p>Enter email for the user to change their profile below</p>
+
     <form action="" method="POST">
         {% csrf_token %}
         <label for="email"> User email</label>

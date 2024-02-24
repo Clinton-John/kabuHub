@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/', views.logoutPage , name="logout"),
 
     path('addEvent/', views.addEvent , name="add_event"),
+    path('addSportsEvent/', views.addSportsEvent , name="add_sports_event"),
     path('userProfile/<str:pk>/', views.userProfile , name="user_profile"),
     path('updateProfile/', views.updateProfile , name="update_profile"),
 
@@ -24,6 +25,7 @@ urlpatterns = [
 
     path('adminsPage/', views.adminsPage ,  name="admins_page"),
     path('changeRole/', views.changeRole ,  name="change_role"),
+    path('addSportsAdmin/', views.addSportsAdmin ,  name="add_sports_admin"),
 
       #email configuration and password reset section
     path('resetPassword/', auth_views.PasswordResetView.as_view(template_name='base/password_reset.html'), name="reset_password" ),

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
 from .models import User , Event
-from .forms import EventForm , UserProfileForm
+from .forms import EventForm , UserProfileForm , SportsForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
@@ -14,8 +14,10 @@ from django.contrib.auth.models import Group
 def home(request):
    events = Event.objects.all()
    group = Group.objects.get(name='super_admin')
-   group_users = group.user_set.all()
-   context = {'events':events, 'group_users':group_users}
+   admin_group = Group.objects.get(name='Admins')
+   admin_group_users = admin_group.user_set.all()
+   group_super_admin = group.user_set.all()
+   context = {'events':events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users}
    return render(request , 'base/home.html', context)
 
 def signup(request):
@@ -100,9 +102,7 @@ def logoutPage(request):
 
 #    context = {'event_form':event_form}
 #    return render(request, 'base/event_form.html', context)
-def addEvent(request):
-   eventform = EventForm()
-   return render(request, 'base/event_form.html', context)
+
 @login_required(login_url='login')
 def addEvent(request):
     event_form = EventForm()
@@ -117,6 +117,18 @@ def addEvent(request):
     context = {'event_form': event_form}
     return render(request, 'base/event_form.html', context)
 
+def addSportsEvent(request):
+   event_form = SportsForm()
+   if request.method == 'POST':
+      form = SportsForm(request.POST, request.FILES)
+      if form.is_valid():
+         event_instance = form.save(commit=False)
+         event_instance.created_by = request.user
+         event_instance.save()
+         return redirect('home')
+
+   context = {'event_form': event_form}
+   return render(request, 'base/event_form.html', context)
 
 def userProfile(request, pk):
    user = User.objects.get(id=pk)
@@ -165,19 +177,27 @@ def deleteUser(request, pk):
 def adminsPage(request):
     group = Group.objects.get(name='super_admin')
     group_users = group.user_set.all()
-    
-    context = {'group_users':group_users}
+
+    admin_group = Group.objects.get(name='Admins')
+    admin_group_users = admin_group.user_set.all()
+
+    sports_admins = Group.objects.get(name='sports_admins')
+    sports_admins_users = sports_admins.user_set.all()
+
+    context = {'group_users':group_users, 'sports_admins_users':sports_admins_users, 'admin_group_users':admin_group_users}
     return render(request , 'base/admins_page.html' , context)
 
 
 def changeRole(request):
-
+   #  message = None
     if request.method == 'POST':
         email = request.POST.get('email')
         try:
             user = User.objects.get(email=email)
         except:
             HttpResponse("User with the provided email doesnt exist")
+            # message = "User with the provided email doesnt exist"
+            # return redirect('change_role')
     
         users_group = Group.objects.get(name='Students')
         if users_group not in user.groups.all():
@@ -192,6 +212,33 @@ def changeRole(request):
 
     context = {}
     return render(request , 'base/change_role.html' , context)
+
+def addSportsAdmin(request):
+   # message = None
+   if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except:
+            
+            return HttpResponse("The user isnt registered in the website")
+            message = "The user with the registered email doesnt exist"
+            return redirect('add_sports_admin')
+    
+        users_group = Group.objects.get(name='Students')
+        if users_group not in user.groups.all():
+            return HttpResponse("The user isnt registered in the website")
+            
+        user.groups.remove(users_group)
+
+        sports_admin_group = Group.objects.get(name='sports_admins')
+        user.groups.add(sports_admin_group)
+
+        return redirect('admins_page')
+
+   context = {}
+   return render(request , 'base/change_role.html' , context)
+
 
 def viewEvent(request, pk):
    event = Event.objects.get(id=pk)
