@@ -72,7 +72,7 @@ class Sport_Event(models.Model):
     @property
     def imageURL(self):
         try:
-            url = self.event_pic.url
+            url = self.sports_pic.url
         except:
             url = ''
         return url

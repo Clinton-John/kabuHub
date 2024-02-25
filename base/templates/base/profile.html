@@ -10,9 +10,7 @@
         <li>{{event}}</li>
     </ul>
     {% endfor %}
-    <div>
-        <h1><a href="{% url 'add_sports_event' %}">Add an upcoming Sports event</a></h1>
-    </div>
+
     <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt=""> {% if request.user == user.id %}
 
     <div>

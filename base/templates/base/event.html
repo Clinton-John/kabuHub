@@ -9,5 +9,13 @@
 
     <p>{{event.description}}</p>
     <p>event posted at: {{event.created}}</p>
+
+    {% if page == 'EventUpdate' %} {% if request.user == event.created_by %}
+    <a href="{% url 'update_event' event.id %}">Update Event</a>
+    <a href="{% url 'delete_event' event.id %}">Delete Event</a> {% endif %}
+    <hr> {% else %} {% if request.user == event.created_by %}
+    <a href="{% url 'update_sports_event' event.id %}">Update Sport Event</a>
+    <a href="{% url 'delete_sports_event' event.id %}">Delete Event</a> {% endif %}
+    <hr> {% endif %}
 </div>
 {% endblock %}

@@ -3,21 +3,28 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
-from .models import User , Event
+from .models import User , Event , Sport_Event
 from .forms import EventForm , UserProfileForm , SportsForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
 
-# Create your views here.
+#---------------------------Basic Website Functions ------------------------------
 
 def home(request):
    events = Event.objects.all()
+   sports_events = Sport_Event.objects.all()
+
    group = Group.objects.get(name='super_admin')
    admin_group = Group.objects.get(name='Admins')
+   sports_admins = Group.objects.get(name='sports_admins')
+   
+   sports_admins_users = sports_admins.user_set.all()
    admin_group_users = admin_group.user_set.all()
    group_super_admin = group.user_set.all()
-   context = {'events':events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users}
+
+
+   context = {'events':events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events}
    return render(request , 'base/home.html', context)
 
 def signup(request):
@@ -84,24 +91,43 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
-# @login_required(login_url='login')
-# def addEvent(request):
-#    event_form = EventForm()
-#    if request.method == 'POST':
-#       form = EventForm(request.POST,request.FILES)
-#       if form.is_valid():
-#          Event.objects.create(
-#             created_by = request.user,
-#             title = request.POST.get('title'),
-#             event_pic = request.POST.get('event_pic'),
-#             date = request.POST.get('date'),
-#             description = request.POST.get('description')
-#          )
 
-#       return redirect('home')
 
-#    context = {'event_form':event_form}
-#    return render(request, 'base/event_form.html', context)
+#---------------------------User Profile functions ------------------------------
+def userProfile(request, pk):
+   user = User.objects.get(id=pk)
+   events = user.event_set.all()
+
+
+   context = {'user':user, 'events':events}
+   return render(request, 'base/profile.html', context)
+
+@login_required(login_url='login')
+def updateProfile(request):
+   user = request.user
+   update_form = UserProfileForm(instance=user)
+   if request.method == 'POST':
+      form = UserProfileForm(request.POST,request.FILES, instance=user)
+      if form.is_valid():
+         form.save()
+         return redirect('user-profile' , pk=user.id)
+ 
+   context = {'update_form':update_form}
+   return render(request,'base/update_profile_new.html', context)
+
+@login_required(login_url='login')
+def deleteUser(request, pk):
+   user = user.objects.get(id=pk)
+
+   if request.method == 'POST':
+      user.delete()
+      return  redirect('home')
+
+   return render(request, 'base/delete.html' , {'obj' :user})
+
+
+
+#---------------------------Website Event functions ------------------------------
 
 @login_required(login_url='login')
 def addEvent(request):
@@ -117,38 +143,23 @@ def addEvent(request):
     context = {'event_form': event_form}
     return render(request, 'base/event_form.html', context)
 
-def addSportsEvent(request):
-   event_form = SportsForm()
+def viewEvent(request, pk):
+   event = Event.objects.get(id=pk)
+   context = {'event':event}
+   return render(request, 'base/event.html', context)
+
+@login_required(login_url="login")
+def updateEvent(request, pk):
+   page = 'EventUpdate'
+   event = Event.objects.get(id=pk)
+   update_form = EventForm(instance=event)
    if request.method == 'POST':
-      form = SportsForm(request.POST, request.FILES)
-      if form.is_valid():
-         event_instance = form.save(commit=False)
-         event_instance.created_by = request.user
-         event_instance.save()
-         return redirect('home')
-
-   context = {'event_form': event_form}
-   return render(request, 'base/event_form.html', context)
-
-def userProfile(request, pk):
-   user = User.objects.get(id=pk)
-   events = user.event_set.all()
-   context = {'user':user, 'events':events}
-   return render(request, 'base/profile.html', context)
-
-
-def updateProfile(request):
-   user = request.user
-   update_form = UserProfileForm(instance=user)
-   if request.method == 'POST':
-      form = UserProfileForm(request.POST,request.FILES, instance=user)
+      form = EventForm(request.POST,request.FILES, instance=user)
       if form.is_valid():
          form.save()
-         return redirect('user-profile' , pk=user.id)
+         return redirect('view_event' , pk=event.id)
       
-
- 
-   context = {'update_form':update_form}
+   context = {'update_form':update_form , 'page':page}
    return render(request,'base/update_profile_new.html', context)
 
 @login_required(login_url='login')
@@ -164,16 +175,59 @@ def deleteEvent(request, pk):
 
    return render(request, 'base/delete.html' , {'obj' :event})
 
+#---------------------------Sports Event Functions ------------------------------
+
+def addSportsEvent(request):
+   event_form = SportsForm()
+   if request.method == 'POST':
+      form = SportsForm(request.POST, request.FILES)
+      if form.is_valid():
+         event_instance = form.save(commit=False)
+         event_instance.created_by = request.user
+         event_instance.save()
+         return redirect('home')
+
+   context = {'event_form': event_form}
+   return render(request, 'base/event_form.html', context)
+
+def viewSportEvent(request, pk):
+   event = Sport_Event.objects.get(id=pk)
+   context = {'event':event}
+   return render(request, 'base/event.html', context)
+
+@login_required(login_url="login")
+def updateSportsEvent(request, pk):
+   page = 'SportsUpdate'
+   sports_event = Sport_Event.objects.get(id=pk)
+   update_form = SportsForm(instance=sports_event)
+   if request.method == 'POST':
+      form = EventForm(request.POST,request.FILES, instance=user)
+      if form.is_valid():
+         form.save()
+         return redirect('view_event' , pk=event.id)
+      
+   context = {'update_form':update_form, 'page':page}
+   return render(request,'base/update_profile_new.html', context)
+
 @login_required(login_url='login')
-def deleteUser(request, pk):
-   user = user.objects.get(id=pk)
+def deleteSportsEvent(request, pk):
+   event = Sport_Event.objects.get(id=pk)
+
+   if request.user != event.created_by:
+      return HttpResponse("you cant update the room !!!") 
 
    if request.method == 'POST':
-      user.delete()
+      event.delete()
       return  redirect('home')
+
+   return render(request, 'base/delete.html' , {'obj' :event})
+
+
 
    return render(request, 'base/delete.html' , {'obj' :user})
 
+#---------------------------Admin and Admins Page Functions ------------------------------
+@login_required(login_url="login")
 def adminsPage(request):
     group = Group.objects.get(name='super_admin')
     group_users = group.user_set.all()
@@ -187,7 +241,7 @@ def adminsPage(request):
     context = {'group_users':group_users, 'sports_admins_users':sports_admins_users, 'admin_group_users':admin_group_users}
     return render(request , 'base/admins_page.html' , context)
 
-
+@login_required(login_url="login")
 def changeRole(request):
    #  message = None
     if request.method == 'POST':
@@ -213,6 +267,7 @@ def changeRole(request):
     context = {}
     return render(request , 'base/change_role.html' , context)
 
+@login_required(login_url="login")
 def addSportsAdmin(request):
    # message = None
    if request.method == 'POST':
@@ -239,9 +294,4 @@ def addSportsAdmin(request):
    context = {}
    return render(request , 'base/change_role.html' , context)
 
-
-def viewEvent(request, pk):
-   event = Event.objects.get(id=pk)
-   context = {'event':event}
-   return render(request, 'base/event.html', context)
 

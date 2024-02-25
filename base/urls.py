@@ -8,21 +8,33 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+    ###Basic Website functionalities
     path('', views.home , name="home"),
     path('home/', views.home , name="home"),
     path('signup/', views.signup , name="signup"),
     path('login/', views.loginPage , name="login"),
     path('logout/', views.logoutPage , name="logout"),
 
-    path('addEvent/', views.addEvent , name="add_event"),
-    path('addSportsEvent/', views.addSportsEvent , name="add_sports_event"),
+    #### The user profile and its functionalities
     path('userProfile/<str:pk>/', views.userProfile , name="user_profile"),
     path('updateProfile/', views.updateProfile , name="update_profile"),
+    path('deleteUser/<str:pk>/', views.deleteUser , name="delete_user"),
 
+    ### The Events section and related functionalities
+    path('addEvent/', views.addEvent , name="add_event"),
     path('event/<str:pk>/', views.viewEvent , name="view_event"),
+    path('updateEvent/<str:pk>/', views.updateEvent , name="update_event"),
     path('deleteEvent/<str:pk>/', views.deleteEvent , name="delete_event"),
-    path('deleteEvent/<str:pk>/', views.deleteUser , name="delete_user"),
+    
+    ##The sports Event section
+    path('addSportsEvent/', views.addSportsEvent , name="add_sports_event"),
+    path('sportEvent/<str:pk>/', views.viewSportEvent , name="view_sports_event"),
+    path('updateSportsEvent/<str:pk>/', views.updateSportsEvent , name="update_sports_event"),
+    path('deleteSportsEvent/<str:pk>/', views.deleteSportsEvent , name="delete_sports_event"),
 
+
+    
+    ### The Administrators Page
     path('adminsPage/', views.adminsPage ,  name="admins_page"),
     path('changeRole/', views.changeRole ,  name="change_role"),
     path('addSportsAdmin/', views.addSportsAdmin ,  name="add_sports_admin"),
