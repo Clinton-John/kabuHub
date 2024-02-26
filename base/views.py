@@ -3,11 +3,13 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
-from .models import User , Event , Sport_Event
-from .forms import EventForm , UserProfileForm , SportsForm
+from .models import User , Event , Sport_Event , Team
+from .forms import EventForm , UserProfileForm , SportsForm , TeamForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
+from .decoraters import unauthenticated_user, allowed_users
+
 
 #---------------------------Basic Website Functions ------------------------------
 
@@ -56,12 +58,9 @@ def signup(request):
     context = {'page':page, 'form':form}
     return render(request , 'base/login_register_new.html', context)
 
+@unauthenticated_user
 def loginPage(request):
    page = 'login'
-
-   if request.user.is_authenticated:
-      return redirect('home')
-   
 
    if request.method == 'POST':
       username = request.POST.get('username')
@@ -86,6 +85,7 @@ def loginPage(request):
 
    context = {'page':page}
    return render(request, 'base/login_register.html', context)
+
 
 def logoutPage(request):
     logout(request)
@@ -130,6 +130,7 @@ def deleteUser(request, pk):
 #---------------------------Website Event functions ------------------------------
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['Admins'])
 def addEvent(request):
     event_form = EventForm()
     if request.method == 'POST':
@@ -145,7 +146,11 @@ def addEvent(request):
 
 def viewEvent(request, pk):
    event = Event.objects.get(id=pk)
-   context = {'event':event}
+   group = Group.objects.get(name='super_admin')
+   group_super_admin = group.user_set.all()
+
+
+   context = {'event':event, 'group_super_admin':group_super_admin}
    return render(request, 'base/event.html', context)
 
 @login_required(login_url="login")
@@ -176,7 +181,8 @@ def deleteEvent(request, pk):
    return render(request, 'base/delete.html' , {'obj' :event})
 
 #---------------------------Sports Event Functions ------------------------------
-
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['sports_admins','super_admin'])
 def addSportsEvent(request):
    event_form = SportsForm()
    if request.method == 'POST':
@@ -192,10 +198,13 @@ def addSportsEvent(request):
 
 def viewSportEvent(request, pk):
    event = Sport_Event.objects.get(id=pk)
-   context = {'event':event}
+   group = Group.objects.get(name='super_admin')
+   group_super_admin = group.user_set.all()
+   context = {'event':event, 'group_super_admin':group_super_admin}
    return render(request, 'base/event.html', context)
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['sports_admins'])
 def updateSportsEvent(request, pk):
    page = 'SportsUpdate'
    sports_event = Sport_Event.objects.get(id=pk)
@@ -209,7 +218,7 @@ def updateSportsEvent(request, pk):
    context = {'update_form':update_form, 'page':page}
    return render(request,'base/update_profile_new.html', context)
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def deleteSportsEvent(request, pk):
    event = Sport_Event.objects.get(id=pk)
 
@@ -225,6 +234,41 @@ def deleteSportsEvent(request, pk):
 
 
    return render(request, 'base/delete.html' , {'obj' :user})
+
+#---------------------------Sports League Functions ------------------------------
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['sports_admins'])
+def addTeam(request):
+   team_form = TeamForm()
+   if request.method == 'POST':
+      form = TeamForm(request.POST)
+      if form.is_valid():
+         form.save()
+         return redirect('manage_league_table')
+
+   context = {'team_form':team_form}
+   return render(request, 'base/team_form.html', context)
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['sports_admins'])
+def manageLeagueTable(request):
+   teams = Team.objects.all().order_by('team_name')
+   context = {'teams':teams}
+
+   return render(request, 'base/league_administration.html', context)
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['sports_admins'])
+def updateTeam(request, pk):
+   team = Team.objects.get(id=pk)
+   update_form = TeamForm(instance=team)
+   if request.method == 'POST':
+      form = TeamForm(request.POST, instance=team)
+      if form.is_valid():
+         form.save()
+         return redirect('manage_league_table')
+   context = {'update_form':update_form}
+   return render(request, 'base/update_profile.html', context)
 
 #---------------------------Admin and Admins Page Functions ------------------------------
 @login_required(login_url="login")
@@ -242,6 +286,7 @@ def adminsPage(request):
     return render(request , 'base/admins_page.html' , context)
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['super_admin'])
 def changeRole(request):
    #  message = None
     if request.method == 'POST':
@@ -268,6 +313,7 @@ def changeRole(request):
     return render(request , 'base/change_role.html' , context)
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['super_admin'])
 def addSportsAdmin(request):
    # message = None
    if request.method == 'POST':

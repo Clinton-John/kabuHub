@@ -1,7 +1,7 @@
 # from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from .models import Event , Profile, User , Sport_Event
+from .models import Event , Profile, User , Sport_Event , Team
 from django import forms
 
 class MyUserCreationForm(UserCreationForm):
@@ -31,3 +31,9 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = Profile
         exclude = ['user'] 
+
+class TeamForm(ModelForm):
+    class Meta:
+        model = Team
+        fields = '__all__'
+        exclude = ['']

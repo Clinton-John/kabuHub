@@ -32,6 +32,10 @@ urlpatterns = [
     path('updateSportsEvent/<str:pk>/', views.updateSportsEvent , name="update_sports_event"),
     path('deleteSportsEvent/<str:pk>/', views.deleteSportsEvent , name="delete_sports_event"),
 
+    ##The Teams section
+    path('addTeam/', views.addTeam , name="add_team"),
+    path('manageLeagueTable/', views.manageLeagueTable , name="manage_league_table"),
+    path('updateTeam/<str:pk>/', views.updateTeam , name="update_team"),
 
     
     ### The Administrators Page

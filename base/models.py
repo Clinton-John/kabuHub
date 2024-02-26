@@ -54,7 +54,7 @@ class Team(models.Model):
     goal_difference = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.title
+        return self.team_name
 
 class Sport_Event(models.Model):
     sports_title = models.CharField(max_length=100)

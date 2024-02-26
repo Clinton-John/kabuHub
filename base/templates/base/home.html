@@ -19,7 +19,8 @@
 
 {% endif %} {% if request.user in sports_admins_users %}
 <div>
-    <h1><a href="{% url 'add_sports_event' %}">Add an upcoming Sports event</a></h1>
+    <h1><a href="{% url 'add_sports_event' %}">Add Sports event</a></h1>
+    <h1><a href="{% url 'manage_league_table' %}">Manage League Table</a></h1>
 </div>
 {% endif %}
 
