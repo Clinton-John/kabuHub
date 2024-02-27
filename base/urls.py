@@ -34,6 +34,7 @@ urlpatterns = [
 
     ##The Teams section
     path('addTeam/', views.addTeam , name="add_team"),
+    path('leagueTable/', views.viewTable , name="league_table"),
     path('manageLeagueTable/', views.manageLeagueTable , name="manage_league_table"),
     path('updateTeam/<str:pk>/', views.updateTeam , name="update_team"),
 

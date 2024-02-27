@@ -3,6 +3,9 @@
     <h1 style="padding-right: 70px;">
         <a href="{% url 'home' %}">Home</a>
     </h1>
+    <h1 style="padding-right: 70px;">
+        <a href="{% url 'league_table' %}">League Table</a>
+    </h1>
     {% if request.user in group_super_admin %}
     <h1 style="padding-right: 70px;">
         <a href="{% url 'admins_page' %}">Admins Page</a>

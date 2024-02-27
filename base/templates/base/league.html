@@ -1,0 +1,9 @@
+{% extends 'index.html' %}{% block content %}
+<div>
+    <h1>The Sports league Table</h1>
+    {% for team in teams %}
+    <h2>{{team.team_name}}</h2>
+    <h3>{{team.team_points}}</h3>
+    {% endfor %}
+</div>
+{% endblock %}

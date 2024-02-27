@@ -14,7 +14,15 @@ from .decoraters import unauthenticated_user, allowed_users
 #---------------------------Basic Website Functions ------------------------------
 
 def home(request):
-   events = Event.objects.all()
+   events = Event.objects.all()[0:3]
+   second_events = Event.objects.all()[4:8]
+   # general_events = Event.objects.filter(topic=q)
+   # law_events = Event.objects.filter(topic='LAW')
+   # kubsa_events = Event.objects.filter(topic='KUBSA')
+   # kuesa_events = Event.objects.filter(topic='KUESA')
+   # sset_events = Event.objects.filter(topic='SSET')
+   # smhs_events = Event.objects.filter(topic='SMHS')
+
    sports_events = Sport_Event.objects.all()
 
    group = Group.objects.get(name='super_admin')
@@ -26,7 +34,7 @@ def home(request):
    group_super_admin = group.user_set.all()
 
 
-   context = {'events':events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events}
+   context = {'events':events,'second_events':second_events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events}
    return render(request , 'base/home.html', context)
 
 def signup(request):
@@ -145,12 +153,13 @@ def addEvent(request):
     return render(request, 'base/event_form.html', context)
 
 def viewEvent(request, pk):
+   page = 'EventUpdate'
    event = Event.objects.get(id=pk)
    group = Group.objects.get(name='super_admin')
    group_super_admin = group.user_set.all()
 
 
-   context = {'event':event, 'group_super_admin':group_super_admin}
+   context = {'event':event, 'group_super_admin':group_super_admin, 'page':page}
    return render(request, 'base/event.html', context)
 
 @login_required(login_url="login")
@@ -159,7 +168,7 @@ def updateEvent(request, pk):
    event = Event.objects.get(id=pk)
    update_form = EventForm(instance=event)
    if request.method == 'POST':
-      form = EventForm(request.POST,request.FILES, instance=user)
+      form = EventForm(request.POST,request.FILES, instance=event)
       if form.is_valid():
          form.save()
          return redirect('view_event' , pk=event.id)
@@ -249,6 +258,10 @@ def addTeam(request):
    context = {'team_form':team_form}
    return render(request, 'base/team_form.html', context)
 
+def viewTable(request):
+   teams = Team.objects.all()
+   context = {'teams':teams}
+   return render(request, 'base/league.html', context)
 @login_required(login_url="login")
 @allowed_users(allowed_roles=['sports_admins'])
 def manageLeagueTable(request):

@@ -27,18 +27,37 @@
 <div>
     <hr>
     <h1>UPCOMING EVENTS</h1>
-    {% for event in events %}
-    <h4>Posted By: <b><a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a></b></h4>
-    <h2>{{event.title}}</h2>
-    <img src="{{event.imageURL}}" style="width: 100px;">
-    <p>Date: {{event.date}}</p>
-    <p>Location: {{event.location}}</p>
+    <hr> {% for event in events %}
+    <div class="sset_events">
+        <h1 style="color: brown;">{{event.topic}}</h1>
+        <h4>Posted By: <b><a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a></b></h4>
+        <h2>{{event.title}}</h2>
+        <img src="{{event.imageURL}}" style="width: 100px;">
+        <p>Date: {{event.date}}</p>
+        <p>Location: {{event.location}}</p>
 
-    <a href="{% url 'view_event' event.id %}">
-        <h3>{{event.description}}</h3>
-    </a>
+        <a href="{% url 'view_event' event.id %}">
+            <h3>{{event.description}}</h3>
+        </a>
+    </div>
     {% endfor %}
 
+</div>
+<div class="second_events">
+    {% for event in second_events %}
+    <div class="sset_events">
+        <h1 style="color: brown;">{{event.topic}}</h1>
+        <h4>Posted By: <b><a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a></b></h4>
+        <h2>{{event.title}}</h2>
+        <img src="{{event.imageURL}}" style="width: 100px;">
+        <p>Date: {{event.date}}</p>
+        <p>Location: {{event.location}}</p>
+
+        <a href="{% url 'view_event' event.id %}">
+            <h3>{{event.description}}</h3>
+        </a>
+    </div>
+    {% endfor %}
 </div>
 <div>
     <hr>
