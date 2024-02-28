@@ -1,0 +1,24 @@
+{% load static %}
+<div style="display:flex;">
+    <h1 style="padding-right: 70px;">
+        <a href="{% url 'home' %}">Home</a>
+    </h1>
+    <h1 style="padding-right: 70px;">
+        <a href="{% url 'league_table' %}">League Table</a>
+    </h1>
+    {% if request.user in group_super_admin %}
+    <h1 style="padding-right: 70px;">
+        <a href="{% url 'admins_page' %}">Admins Page</a>
+    </h1>
+
+    {% endif %} {% if request.user.is_authenticated %}
+    <h2>
+        <a href="{% url 'user_profile' request.user.id %}">{{request.user.username}}</a>
+    </h2>
+    {% else %}
+    <h2>
+        Not Logged In
+    </h2>
+    {% endif %}
+
+</div>

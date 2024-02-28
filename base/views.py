@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import MyUserCreationForm
 from django.contrib.auth import login , authenticate , logout
-from .models import User , Event , Sport_Event , Team
+from .models import User , Event , Sport_Event , Team, Topic
 from .forms import EventForm , UserProfileForm , SportsForm , TeamForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -14,8 +14,10 @@ from .decoraters import unauthenticated_user, allowed_users
 #---------------------------Basic Website Functions ------------------------------
 
 def home(request):
-   events = Event.objects.all()[0:3]
-   second_events = Event.objects.all()[4:8]
+   events = Event.objects.all()[0:4]
+   second_events = Event.objects.all()[5:8]
+   topics = Topic.objects.all()
+    
    # general_events = Event.objects.filter(topic=q)
    # law_events = Event.objects.filter(topic='LAW')
    # kubsa_events = Event.objects.filter(topic='KUBSA')
@@ -34,7 +36,7 @@ def home(request):
    group_super_admin = group.user_set.all()
 
 
-   context = {'events':events,'second_events':second_events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events}
+   context = {'events':events,'second_events':second_events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events, 'topics':topics}
    return render(request , 'base/home.html', context)
 
 def signup(request):

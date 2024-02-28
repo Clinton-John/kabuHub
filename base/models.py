@@ -53,6 +53,7 @@ class Event(models.Model):
 
 class Team(models.Model):
     team_name = models.CharField(max_length=128, unique=True)
+    games_played = models.IntegerField(default=0)
     team_points = models.IntegerField(default=0)
     goals_scored = models.IntegerField(default=0)
     goals_against = models.IntegerField(default=0)

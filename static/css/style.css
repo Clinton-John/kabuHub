@@ -405,25 +405,27 @@ a {
 }
 
 .layout--3>.container>div:first-child {
-    flex-basis: 18%;
+    flex-basis: 25%;
     max-width: 22.5rem;
 }
 
 .layout--3>.container>div:nth-child(2) {
-    flex-basis: 50%;
+    flex-basis: 62%;
 }
 
-.layout--3>.container>div:last-child {
+
+/* .layout--3>.container>div:last-child {
     flex-basis: 25%;
-}
+} */
 
-.layout--2>.container>div:first-child {
+
+/* .layout--2>.container>div:first-child {
     flex-basis: 72%;
 }
 
 .layout--2>.container>div:last-child {
     flex-basis: 25%;
-}
+} */
 
 
 /*========== Layout Box ==========*/
@@ -1254,3 +1256,8 @@ a {
     width: 200px;
     height: 200px;
 }
+
+
+/*==============================
+=>  League Table Section
+================================*/
