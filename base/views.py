@@ -14,7 +14,7 @@ from .decoraters import unauthenticated_user, allowed_users
 #---------------------------Basic Website Functions ------------------------------
 
 def home(request):
-   events = Event.objects.all()[0:4]
+   events = Event.objects.all()[0:2]
    second_events = Event.objects.all()[5:8]
    topics = Topic.objects.all()
     

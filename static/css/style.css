@@ -1233,7 +1233,7 @@ a {
 .container1 {
     width: 100%;
     overflow-x: auto;
-    white-space: nowrap;
+    white-space: wrap;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -1256,8 +1256,3 @@ a {
     width: 200px;
     height: 200px;
 }
-
-
-/*==============================
-=>  League Table Section
-================================*/
