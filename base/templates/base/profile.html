@@ -1,21 +1,54 @@
-{% extends 'index.html' %} {% block content %}
-<div>
-    <h2>
-        the user profile
-    </h2>
-    {{user.username}}
-    <h2>Events Uploaded by the user</h2>
-    {% for event in events %}
-    <ul>
-        <li>{{event}}</li>
-    </ul>
-    {% endfor %}
+{% extends 'index.html' %}{% block content %}
 
-    <img class="profile_pic" src="{{request.user.profile.profile_pic.url}}" alt=""> {% if request.user == user.id %}
-
-    <div>
-        <a href="{% url 'delete_user' request.user.id %}">Delete Account</a>
+<div class="profile">
+    <div class="profile__avatar">
+        <div class="avatar avatar--large active">
+            <img src="{{user.profile.profile_pic.url}}" />
+        </div>
     </div>
-    {% endif %}
+    <div class="profile__info">
+        <h3>{{user.username}}</h3>
+        <p>@{{user.username}}</p>
+        {% if request.user == user %}
+        <a href="{% url 'update_profile' %}" class="btn btn--main btn--pill">Edit Profile</a> {% endif %}
+    </div>
+    <div class="profile__about">
+        <h3>About</h3>
+        {% if about_you %}
+        <p>
+            {{user.about_you}}
+        </p>
+        {% else %} {% if request.user == user %}
+        <p>Edit your profile so other people can know aout you</p>
+        {% else %}
+        <p>The user hasn't described himself</p>
+        {% endif %} {% endif %}
+    </div>
+    <div>
+        <h2 class="profile_events">Events Uploaded by the user</h2>
+        <div class="container1">
+            <div class="image-container1">
+                {% for event in events %}
+                <div class="image-wrap">
+                    <a href="{% url 'view_event' event.id %}">
+                        <img src="{{event.imageURL}}">
+                        <p>
+                            <!-- the a tag should redirect the user to an events page where the event is fully described -->
+                            <p class="event_description">{{event.title}}</p>
+                        </p>
+                    </a>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {% if request.user == user %}
+        <div>
+            <a href="{% url 'delete_user' request.user.id %}" style="color: red;">Delete Account</a>
+        </div>
+        {% endif %}
+    </div>
 </div>
+
 {% endblock %}

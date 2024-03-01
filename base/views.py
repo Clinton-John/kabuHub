@@ -14,7 +14,7 @@ from .decoraters import unauthenticated_user, allowed_users
 #---------------------------Basic Website Functions ------------------------------
 
 def home(request):
-   events = Event.objects.all()[0:2]
+   events = Event.objects.all()
    second_events = Event.objects.all()[5:8]
    topics = Topic.objects.all()
     
@@ -66,7 +66,7 @@ def signup(request):
 
 
     context = {'page':page, 'form':form}
-    return render(request , 'base/login_register_new.html', context)
+    return render(request , 'base/login_register.html', context)
 
 @unauthenticated_user
 def loginPage(request):
@@ -78,18 +78,15 @@ def loginPage(request):
 
       try:
          user = User.objects.get(username=username)
-         user = authenticate(request, username=username , password=password)
-         if user is not None:
-            login(request, user)
-            return redirect('home')
+         
       except:
          messages.error(request, 'User does not exist')
-
-    #   user = authenticate(request, username=username , password=password)
-
-    #   if user is not None:
-    #      login(request, user)
-    #      return redirect('home')
+      
+      user = authenticate(request, username=username , password=password)
+      if user is not None:
+         login(request, user)
+         return redirect('home')
+      else:
          messages.error(request, 'Username or Password doesnt exist')
 
 
@@ -117,17 +114,17 @@ def updateProfile(request):
    user = request.user
    update_form = UserProfileForm(instance=user)
    if request.method == 'POST':
-      form = UserProfileForm(request.POST,request.FILES, instance=user)
-      if form.is_valid():
-         form.save()
-         return redirect('user-profile' , pk=user.id)
+      update_form = UserProfileForm(request.POST,request.FILES, instance=user)
+      if update_form.is_valid():
+         update_form.save()
+         return redirect('user_profile' , pk=user.id)
  
    context = {'update_form':update_form}
-   return render(request,'base/update_profile_new.html', context)
+   return render(request,'base/update_profile.html', context)
 
 @login_required(login_url='login')
 def deleteUser(request, pk):
-   user = user.objects.get(id=pk)
+   user = User.objects.get(id=pk)
 
    if request.method == 'POST':
       user.delete()

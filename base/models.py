@@ -18,6 +18,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
+    about_you = models.TextField(null=True)
     profile_pic = models.ImageField(default="avatar.svg", null=True , blank=True)
 
     def  __str__(self):
