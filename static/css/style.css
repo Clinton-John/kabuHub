@@ -1282,3 +1282,11 @@ a {
 .profile__events {
     text-align: center;
 }
+
+.reset_sent {
+    margin-bottom: 300px;
+}
+
+.space_down {
+    margin-bottom: 150px;
+}
