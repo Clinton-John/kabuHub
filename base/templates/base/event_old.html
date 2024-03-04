@@ -1,0 +1,21 @@
+{% extends 'index.html' %}{% block content %}
+<div>
+    <h1>Specific Event section</h1>
+    <h2>{{event.title}} upcoming on date <b>{{event.date}}</b> </h2>
+    <p>Event posted By: <a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a>
+    </p>
+    <img src="{{event.imageURL}}" style="width: 200px;" alt="">
+
+
+    <p>{{event.description}}</p>
+    <p>event posted at: {{event.created}}</p>
+
+    {% if page == 'EventUpdate' %} {% if request.user == event.created_by or request.user in group_super_admin %}
+    <a href="{% url 'update_event' event.id %}" style="padding-left: 30px;">Update Event</a>
+    <a href="{% url 'delete_event' event.id %}">Delete Event</a> {% endif %}
+    <hr> {% else %} {% if request.user == event.created_by or request.user in group_super_admin %}
+    <a href="{% url 'update_sports_event' event.id %}">Update Sport Event</a>
+    <a href="{% url 'delete_sports_event' event.id %}">Delete Event</a> {% endif %}
+    <hr> {% endif %}
+</div>
+{% endblock %}

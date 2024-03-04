@@ -488,7 +488,8 @@ a {
 ================================*/
 
 .footer_container {
-    background-color: red;
+    padding: 1.5rem;
+    background-color: var(--color-dark);
 }
 
 .sp_footer {
@@ -499,8 +500,20 @@ a {
     height: 70px;
     width: 100%;
     /* should have the header color */
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     border: 1px solid;
+}
+
+.section1 {
+    flex-basis: 30%;
+}
+
+.section2 {
+    flex-basis: 30%;
+}
+
+.section3 {
+    flex-basis: 30%;
 }
 
 @media screen and (max-width: 900px) {
@@ -509,7 +522,7 @@ a {
         align-items: center;
     }
     .section1 {
-        flex-basis: 25%;
+        flex-basis: 40%;
     }
     .section2 {
         flex-basis: 50%;

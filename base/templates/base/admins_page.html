@@ -1,37 +1,86 @@
 {% extends "index.html" %} {% block content %}
 
-<div class="admins_page">
-    <h1>The League Admins Page</h1>
-    <div class="top_navbar">
-        <h2>
-            <a href="{% url 'change_role' %}">Add an Admin</a>
-        </h2>
-        <p>The available website admins are</p>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        /* background-color: #f4f4f4; */
+    }
+    
+    .admins_page {
+        max-width: 800px;
+        margin: 20px auto;
+        /* background-color: #fff; */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admins_page h1 {
+        text-align: center;
+        /* color: #333; */
+    }
+    
+    .top_navbar {
+        margin-bottom: 20px;
+    }
+    
+    .top_navbar h2 {
+        margin-bottom: 10px;
+        color: #555;
+    }
+    
+    .top_navbar a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    ul li {
+        margin-bottom: 5px;
+    }
+    
+    hr {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+</style>
+
+<body>
+    <div class="admins_page">
+        <h1>The League Admins Page</h1>
+        <div class="top_navbar">
+            <h2>
+                <a href="{% url 'change_role' %}">Add an Admin</a>
+            </h2>
+            <p>The available website admins are</p>
+            <ul>
+                {% for user in admin_group_users %}
+                <li>{{user.username}}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+        <div>
+            <h2>Add sports Admins section</h2>
+            <h2>
+                <a href="{% url 'add_sports_admin' %}">Add a sports Admin</a>
+            </h2>
+        </div>
+        <p>The available sports admins are</p>
         <ul>
-            {% for user in admin_group_users %}
-            <li>{{user.username}}
-            </li>
+            {% for user in sports_admins_users %}
+            <li>{{user.username}}</li>
             {% endfor %}
         </ul>
         <hr>
     </div>
-    <div>
-        <h2>Add sports Admins section</h2>
-        <h2>
-            <a href="{% url 'add_sports_admin' %}">Add a sports Admin</a>
-        </h2>
-    </div>
-    <p>The available sports admins are</p>
-    <ul>
-        {% for user in sports_admins_users %}
-        <li>{{user.username}}
-        </li>
-        {% endfor %}
-    </ul>
-    <hr>
-    <hr>
+</body>
 
-
-
-</div>
 {% endblock %}

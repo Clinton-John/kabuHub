@@ -8,11 +8,6 @@
         <a href="{% url 'league_table' %}" class="header__logo" id="header_logo1">
             <h1>Kabarak League</h1>
         </a>
-        {% if request.user in group_users %}
-        <a href="{% url 'admins_page' %}" class="header__logo">
-            <h1>Admins Page</h1>
-        </a>
-        {% endif %}
 
         <!-- <form class="header__search">
             <label>

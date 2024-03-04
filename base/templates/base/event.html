@@ -1,21 +1,72 @@
 {% extends 'index.html' %}{% block content %}
-<div>
-    <h1>Specific Event section</h1>
-    <h2>{{event.title}} upcoming on date <b>{{event.date}}</b> </h2>
-    <p>Event posted By: <a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a>
-    </p>
-    <img src="{{event.imageURL}}" style="width: 200px;" alt="">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        /* background-color: #f4f4f4; */
+    }
+    
+    .event_section {
+        max-width: 800px;
+        margin: 20px auto;
+        /* background-color: #fff; */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .event_section h1 {
+        text-align: center;
+        /* color: #333; */
+    }
+    
+    .event_section h2 {
+        margin-bottom: 10px;
+        color: #555;
+    }
+    
+    .event_section p {
+        margin-bottom: 10px;
+    }
+    
+    .event_section a {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+    
+    .event_section img {
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    
+    hr {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+</style>
 
+<body>
+    <div class="event_section">
+        <h1>Upcoming Event</h1>
+        <h2>{{event.title}} upcoming on date <b>{{event.date}}</b> </h2>
+        <p>Event posted By: <a href="{% url 'user_profile' event.created_by.id %}">{{event.created_by}}</a>
+        </p>
+        <img src="{{event.imageURL}}" alt="Event Image" style="width: 200px;">
+        <p>{{event.description}}</p>
+        <p>Event posted at: {{event.created}}</p>
 
-    <p>{{event.description}}</p>
-    <p>event posted at: {{event.created}}</p>
-
-    {% if page == 'EventUpdate' %} {% if request.user == event.created_by or request.user in group_super_admin %}
-    <a href="{% url 'update_event' event.id %}" style="padding-left: 30px;">Update Event</a>
-    <a href="{% url 'delete_event' event.id %}">Delete Event</a> {% endif %}
-    <hr> {% else %} {% if request.user == event.created_by or request.user in group_super_admin %}
-    <a href="{% url 'update_sports_event' event.id %}">Update Sport Event</a>
-    <a href="{% url 'delete_sports_event' event.id %}">Delete Event</a> {% endif %}
-    <hr> {% endif %}
-</div>
+        {% if page == 'EventUpdate' %} {% if request.user == event.created_by or request.user in group_super_admin %}
+        <a href="{% url 'update_event' event.id %}">Update Event</a>
+        <a href="{% url 'delete_event' event.id %}">Delete Event</a> {% endif %} {% else %} {% if request.user == event.created_by or request.user in group_super_admin %}
+        <a href="{% url 'update_sports_event' event.id %}">Update Sport Event</a>
+        <a href="{% url 'delete_sports_event' event.id %}">Delete Event</a> {% endif %} {% endif %}
+        <hr>
+    </div>
+</body>
 {% endblock %}

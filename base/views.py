@@ -15,17 +15,10 @@ from .decoraters import unauthenticated_user, allowed_users
 
 def home(request):
    events = Event.objects.all()
-   second_events = Event.objects.all()[5:8]
-   topics = Topic.objects.all()
-    
-   # general_events = Event.objects.filter(topic=q)
-   # law_events = Event.objects.filter(topic='LAW')
-   # kubsa_events = Event.objects.filter(topic='KUBSA')
-   # kuesa_events = Event.objects.filter(topic='KUESA')
-   # sset_events = Event.objects.filter(topic='SSET')
-   # smhs_events = Event.objects.filter(topic='SMHS')
+   second_events = Event.objects.all()[0:8]
+   topics = Topic.objects.all()[0:4]
 
-   sports_events = Sport_Event.objects.all()
+   sports_events = Sport_Event.objects.all()[0:4]
 
    group = Group.objects.get(name='super_admin')
    admin_group = Group.objects.get(name='Admins')
@@ -36,7 +29,7 @@ def home(request):
    group_super_admin = group.user_set.all()
 
 
-   context = {'events':events,'second_events':second_events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events, 'topics':topics}
+   context = {'events':events, 'group_super_admin':group_super_admin, 'admin_group_users':admin_group_users, 'sports_admins_users':sports_admins_users, 'sports_events':sports_events, 'topics':topics}
    return render(request , 'base/home.html', context)
 
 def signup(request):
@@ -173,7 +166,7 @@ def updateEvent(request, pk):
          return redirect('view_event' , pk=event.id)
       
    context = {'update_form':update_form , 'page':page}
-   return render(request,'base/update_profile_new.html', context)
+   return render(request,'base/update_profile.html', context)
 
 @login_required(login_url='login')
 def deleteEvent(request, pk):
