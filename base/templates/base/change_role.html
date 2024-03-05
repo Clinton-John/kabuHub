@@ -1,14 +1,63 @@
 {% extends 'index.html' %} {% block content %}
-<div class="change_role">
-    <p>Enter email for the user to change their profile below</p>
+<style>
+    .change_role {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .change_role a {
+        display: block;
+        text-decoration: none;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+    
+    .change_role p {
+        margin-bottom: 20px;
+    }
+    
+    .change_role form label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .change_role form input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    
+    .change_role form input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .change_role form input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        <label for="email"> User email</label>
-        <input type="email" name="email" placeholder="eg . clintonjohn@gmail.com"><br>
-        <input type="submit" value="Submit">
+<body>
+    <div class="change_role">
+        <a href="{% url 'admins_page' %}">Back</a>
+        <p>Enter email for the user to change their profile below</p>
 
-    </form>
-</div>
-
+        <form action="" method="POST">
+            {% csrf_token %}
+            <label for="email"> User email</label>
+            <input type="email" name="email" placeholder="eg . email@gmail.com"><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
 {% endblock %}

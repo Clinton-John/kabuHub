@@ -238,7 +238,7 @@ def deleteSportsEvent(request, pk):
 
 #---------------------------Sports League Functions ------------------------------
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['sports_admins'])
+# @allowed_users(allowed_roles=['sports_admins'])
 def addTeam(request):
    team_form = TeamForm()
    if request.method == 'POST':
@@ -255,15 +255,17 @@ def viewTable(request):
    context = {'teams':teams}
    return render(request, 'base/league.html', context)
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['sports_admins'])
+# @allowed_users(allowed_roles=['sports_admins'])
 def manageLeagueTable(request):
+   group = Group.objects.get(name='sports_admins')
+   group_users = group.user_set.all()
    teams = Team.objects.all().order_by('team_name')
    context = {'teams':teams}
 
    return render(request, 'base/league_administration.html', context)
 
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['sports_admins'])
+# @allowed_users(allowed_roles=['sports_admins'])
 def updateTeam(request, pk):
    team = Team.objects.get(id=pk)
    update_form = TeamForm(instance=team)
@@ -277,6 +279,7 @@ def updateTeam(request, pk):
 
 #---------------------------Admin and Admins Page Functions ------------------------------
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['super_admin'])
 def adminsPage(request):
     group = Group.objects.get(name='super_admin')
     group_users = group.user_set.all()

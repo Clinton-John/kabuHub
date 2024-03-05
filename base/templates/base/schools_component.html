@@ -7,6 +7,9 @@
         <li>
             <a href="{% url 'home' %}" class="active">ALL <span>{{topics.count}}</span></a>
         </li>
+        <li>
+            <a href="{% url 'home' %}" class="active">Sports <span>{{topics.count}}</span></a>
+        </li>
         {% for topic in topics %}
         <li>
             <a href="" class="active">{{topic.name}} <span>{{topic.event_set.all.count}}</span></a>

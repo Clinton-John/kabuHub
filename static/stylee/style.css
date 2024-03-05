@@ -492,6 +492,10 @@ a {
     background-color: var(--color-dark);
 }
 
+.footer_container.section2 {
+    margin-left: 50px;
+}
+
 .sp_footer {
     display: flex;
     justify-content: center;
