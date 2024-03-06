@@ -8,7 +8,7 @@
             <a href="{% url 'home' %}" class="active">ALL <span>{{topics.count}}</span></a>
         </li>
         <li>
-            <a href="{% url 'home' %}" class="active">Sports <span>{{topics.count}}</span></a>
+            <a href="{% url 'view_sports_events' %}" class="active">Sports <span>{{sports_events.count}}</span></a>
         </li>
         {% for topic in topics %}
         <li>

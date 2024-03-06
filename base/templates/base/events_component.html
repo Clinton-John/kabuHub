@@ -1,0 +1,32 @@
+<div class="container1">
+    <div class="image-container1">
+        {% for event in events %}
+        <div class="image-wrap">
+            <a href="{% url 'view_event' event.id %}">
+                <img src="{{event.imageURL}}">
+                <p>
+                    <!-- the a tag should redirect the user to an events page where the event is fully described -->
+                    <p class="event_description">{{event.title}}</p>
+                </p>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+<div class="container1">
+    <div class="image-container1">
+        {% for event in sports_events %}
+        <div class="image-wrap">
+            <a href="{% url 'view_sports_event' event.id %}">
+                <img src="{{event.imageURL}}">
+                <p>
+                    <!-- the a tag should redirect the user to an events page where the event is fully described -->
+                    <p class="event_description">{{event.title}}</p>
+                </p>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>

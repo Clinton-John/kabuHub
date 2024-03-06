@@ -23,7 +23,7 @@
     
     .event_section h2 {
         margin-bottom: 10px;
-        color: #555;
+        /* color: #555; */
     }
     
     .event_section p {
@@ -67,6 +67,9 @@
         <a href="{% url 'update_sports_event' event.id %}">Update Sport Event</a>
         <a href="{% url 'delete_sports_event' event.id %}">Delete Event</a> {% endif %} {% endif %}
         <hr>
+
     </div>
+
+
 </body>
 {% endblock %}

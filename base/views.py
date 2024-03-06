@@ -91,6 +91,11 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
+def sportsEvent(request):
+   sports_events = Sport_Event.objects.all()
+   context = {'sports_events':sports_events}
+   return render(request, 'base/events_component.html', context)
+
 
 
 #---------------------------User Profile functions ------------------------------
@@ -183,7 +188,7 @@ def deleteEvent(request, pk):
 
 #---------------------------Sports Event Functions ------------------------------
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['sports_admins','super_admin'])
+# @allowed_users(allowed_roles=['sports_admins','super_admin'])
 def addSportsEvent(request):
    event_form = SportsForm()
    if request.method == 'POST':

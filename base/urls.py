@@ -27,6 +27,7 @@ urlpatterns = [
     path('deleteEvent/<str:pk>/', views.deleteEvent , name="delete_event"),
     
     ##The sports Event section
+    path('viewSportsEvents/', views.sportsEvent , name="view_sports_events"),
     path('addSportsEvent/', views.addSportsEvent , name="add_sports_event"),
     path('sportEvent/<str:pk>/', views.viewSportEvent , name="view_sports_event"),
     path('updateSportsEvent/<str:pk>/', views.updateSportsEvent , name="update_sports_event"),
