@@ -32,4 +32,32 @@
     <hr>
 
 </div>
+
+<div class="deleted">
+    <div class="league-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Club</th>
+                    <th>Played</th>
+                    <th>Goal Difference</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for standing in standings %}
+                <tr>
+                    <td>{{ standing.position }}</td>
+                    <td>
+                        <a href="{% url 'team' standing.id %}">{{ standing.club }}</a></td>
+                    <td>{{ standing.played }}</td>
+                    <td>{{ standing.goal_difference }}</td>
+                    <td>{{ standing.points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

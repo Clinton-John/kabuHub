@@ -1,0 +1,5 @@
+THE FOLLOWING SECTION IS DEDICATED TO DEPLOYING THE PROJECT TO THE VERCEL SITE
+  1. create an account and link the account to github or choose the login with github to make it easier
+  2.in your project, settings.py,
+     Find the allowed host and set it to 
+       ALLOWED_HOST = ['.vercel.app']
