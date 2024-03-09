@@ -1,7 +1,0 @@
-{% extends 'index.html' %} {% block content %}
-<h1>Create a Team to add it to the league table</h1>
-<form action="" method="POST">
-    {% csrf_token %} {{ team_form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-{% endblock %}
