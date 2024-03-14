@@ -1,0 +1,23 @@
+switching the database from sqlite to postgress process
+download postgress and in the pgadmin4
+create a new server group, in the group create a new server , in the new server a default database will be created.
+in the databse right click and create a new database and in the database you can create tables.
+since we are using django, the tables will be created whenever we migrate the database.
+ run the PIP INSTALL PSYCOPG2 --- psycopg2 ## this allows the postgress to interact with the django application
+
+after that, in the settings.py -> databases, add the following code snippet
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DB_NAME',
+        'USER': 'postgress',
+        'PASSWORD' : 'password',
+        'HOST' : 'localhost',
+        'PORT' : 5432,
+    }
+}
+##after adding the following lines of code, run the migration to make the changes in the new database python manage.py migrate
+after running the migrations, go to the pgadmin to look at the tables that have been created
+
+               ## CREATING A POSTGRESS DATABASE ON AWS AND CONNECT IT TO THE LOCAL PROJECT
+create an aws account to be able to use their products

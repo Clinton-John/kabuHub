@@ -1,4 +1,0 @@
-all the documentation for working with emails in our website.
-
-#sending the user emails any time the user creates an account
-in the signals.py ---->

@@ -90,10 +90,22 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 # }
 # pymysql.install_as_MySQLdb()
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+import psycopg2
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DemoDB',
+        'USER': 'postgress',
+        'PASSWORD' : 'clinton565',
+        'HOST' : 'localhost',
+        'PORT' : 5432,
     }
 }
 
