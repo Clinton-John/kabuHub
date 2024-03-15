@@ -96,13 +96,13 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-import psycopg2
+# import psycopg2
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'DemoDB',
-        'USER': 'postgress',
+        'USER': 'postgres',
         'PASSWORD' : 'clinton565',
         'HOST' : 'localhost',
         'PORT' : 5432,
