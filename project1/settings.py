@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config
-import pymysql
+# from decouple import config
+# import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -98,14 +98,15 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 # }
 # import psycopg2
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DemoDB',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'KabuHub',
         'USER': 'postgres',
-        'PASSWORD' : 'clinton565',
-        'HOST' : 'localhost',
-        'PORT' : 5432,
+        'PASSWORD': 'clinton565',
+        'HOST': 'localhost',  # or your database host
+        'PORT': '',  # leave empty for default port
     }
 }
 

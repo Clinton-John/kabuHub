@@ -1,0 +1,9 @@
+In this tutorial, we will be migrating the django database from sqlite databse to a postgresql database
+steps
+  1. create a backup data of all the data in the project
+    python manage.py dumpdata > datadump.json  ## this creates a backup of the data in db and creates a file
+    a new file will be created which after we can import all the data into a postgresql db
+  2. create a new database in the pgAdmin after installing the postgresql
+  3. python manage.py migrate --run-syncdb  ## this syncs the 
+  4. after syncing the db, load the database that you backed up using the comand below
+      python manage.py loaddata datadump.json     ## this loads all the data that was previously in the sqlite database 
