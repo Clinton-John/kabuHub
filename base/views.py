@@ -284,7 +284,7 @@ def updateTeam(request, pk):
 
 #---------------------------Admin and Admins Page Functions ------------------------------
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['super_admin'])
+# @allowed_users(allowed_roles=['super_admin'])
 def adminsPage(request):
     group = Group.objects.get(name='super_admin')
     group_users = group.user_set.all()
@@ -299,7 +299,7 @@ def adminsPage(request):
     return render(request , 'base/admins_page.html' , context)
 
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['super_admin'])
+# @allowed_users(allowed_roles=['super_admin'])
 def changeRole(request):
    #  message = None
     if request.method == 'POST':
@@ -326,7 +326,7 @@ def changeRole(request):
     return render(request , 'base/change_role.html' , context)
 
 @login_required(login_url="login")
-@allowed_users(allowed_roles=['super_admin'])
+# @allowed_users(allowed_roles=['super_admin'])
 def addSportsAdmin(request):
    # message = None
    if request.method == 'POST':

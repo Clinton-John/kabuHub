@@ -90,25 +90,25 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 # }
 # pymysql.install_as_MySQLdb()
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # import psycopg2
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'KabuHub',
-        'USER': 'postgres',
-        'PASSWORD': 'clinton565',
-        'HOST': 'localhost',  # or your database host
-        'PORT': '',  # leave empty for default port
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'KabuHub2',
+#         'USER': 'postgres',
+#         'PASSWORD': 'clinton565',
+#         'HOST': 'localhost',  # or your database host
+#         'PORT': '',  # leave empty for default port
+#     }
+# }
 
 
 
