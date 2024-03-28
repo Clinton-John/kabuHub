@@ -29,7 +29,7 @@ def createProfile(sender, instance,  created, **kwargs):
 def deleteUser(sender, instance, **kwargs):
     user = instance.user
     user.delete()
-
+#the next signal to be added is one that sends an email to a user once the user's role is changed
 post_save.connect(createProfile, sender=User)
 post_delete.connect(deleteUser, sender=Profile)
         
