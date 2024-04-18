@@ -16,7 +16,7 @@ def createProfile(sender, instance,  created, **kwargs):
             email = user.email
         )
         subject = 'Welcome to Kabu Hub'
-        message = 'we are glad to have you join the community'
+        message = 'we are glad to have you join the Kabarak Community.'
         send_mail(
             subject,
             message,
