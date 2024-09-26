@@ -1,0 +1,788 @@
+Laawrence journal - foundeer of the django framework
+creating a new django project - {django-admin startproject projectname }  //on the terminal or on cmd
+the django projects come with a folder known as manage.py used to interact with the django project
+Django project has a built-in development server which is used to run application instantly without any external web server. for example to run a php project you use the xampp server. to run 
+to run the application - {python3 manage.py runserver} this starts the server and the server can now be accessed at the localhost with port 8000 // on windows {python manage.py runserver} the python is just enought the python3 isnt amust 
+
+pip install virtualenv - allows you run your django as a 
+virtulenv env - creates a virtual server env
+env\scripts\activate - activates the virtual envuronment created calledd the env folder
+env\scripts\deactivate - this deactives the virtual environment
+Isolation of Dependencies: Virtual environments create a self-contained space for each project, allowing you to install specific versions of packages and libraries without affecting other projects or the system-wide Python installation.
+
+{pip install django} install django when the virtual environment is enabled. after django is successfully instaled then you can type the command {django-admin} to confirm a successfull installation. now you can start the project..
+
+                    BUILDING THE project
+{django-admin startproject meccollege} - create the project called meccollege
+{python manage.py runserver} - start the python development server
+on the project activate the environment if using vscode run the {env\scripts\activate}. if runningscripts is disabled in the oc then you can change the setting by opening the powershell terminal and typing the following commands to change the execution-ExecutionPolicy
+PS C:\Windows\system32> Get-ExecutionPolicy
+Restricted
+PS C:\Windows\system32> Set-ExecutionPolicy unrestricted
+
+manage.py - The manage.py file simplifies the management of Django projects by providing a single interface for various administrative tasks, making it easier for developers to handle and maintain their Django applications. it helps start and manage django projects , database operations , utilities and maintanance
+
+{python manage.py startapp index} -  this creates the base app that will be the base page of our application,website. a folder with the name index will appear in the page.
+at this point the django project doesnt know about the index folder/app so we must connect it to the projects. to do this,
+in the settings.py file in the INSTALED_APPS add 'index.add.BaseConfig' and now the projects knows about the new folder that we have just added.
+next is creating a url to the index file we just created. to create a view, we can use a 
+def home(request): #defining a home function that takes a rwquest object. the request object defines the http request method. what kinf of data user is sending what kind if data the user is requesting etc..
+you first import the HttpResponse from the django.http to enable you display the 
+def home(request):
+   return HttpResponse("Welcome to the Home Page")a simple example to show how a view can be shown
+now after having the function you must set the route to display the HttpResponse 
+path('', home), so when a user goes to the home page which is an empty url , the home function is triggered and the content is displayed in the screen. now when a user reloads the page the HttpResponse from the function is displayed
+urls trigger views.. the views are not always written in the file as shown above but on a dfrnt file 
+
+creating a new urls.py file in the index directory to handle the index directories and the urls.py in the root projects folder thats incharge of the root urls. from the urls.py , import the paths and then import views fro the same directory using the . view import file. create a list to store the paths that you are to create. 
+After adding the urls on the index file , when you try accesing the home page there will be an error this is because we havnet configured the urls to the paths directories . to add the urls , go to the main url and import the include function from the url package.
+the url in the meccollege folder is incharge of handling all the routing.create a path in the main url to re-route the traffic to the url lists where the index package is.  
+path('', include('base.urls')) // for any path thats a clear go ahead and re route to the base urls file using the include function .we can now route our traffic and render some words to the screen
+
+                                  TEMPLATES
+create a new folder called template to store the templates. this folder will be incharge of all the html and any dynamic content that will be added to the screen. create a file index.html and lessons.html
+now instead of rendering the httpresponse we can render the markup language
+after creating the templates folder you need to make django know about the folder we just created
+main project ->settings.py -> TEMPLATES -> DIR[ 
+     BASE_DIR / 'templates'
+]  (the statement bassically means go back to the base directory and find the templates directory). know django knows about the templates folder
+in order to access the views we need to go back to the views folder and use the render() method
+return render(request , "index.html") // now the HttpResponse isnt necessary because to return the html oages to the screen the render method is used in django
+    Template-inheritance - it involves including templates inside other templates to avoid repetition. for example a footer appearing in every page of the website.
+create a file footer.html in the templates folder and then using 
+            {% include 'footer.html' %}
+, add this to any html file that you want to contain the footer and all the content if the footer will appear to the files. this is an example of templae inheritance and how it works
+you can also create a main template file to wrap the other templates. creting a head tag that contains the links to the css and js files and then wrapping the user files. 
+<body>
+
+   {% block content %}
+   {% endblock%}
+   </body>
+    
+     passing data and variables to the templates
+   in the views.py file define a list lessons that takes lessons  lessons = [
+    {"id":1 , "name":"startups packages"},
+    {"id":2 , "name":"frontend classes"},
+    {"id":3 , "name":"backend classes" }
+]
+now we want to have access to this values in the templates 
+ return render(request , "index.html" ,{'lessons':lessons}) the lessons wll be passed to the index.html for rendering . in the index.html , to access the information, <div>
+        {% for room in rooms%}
+        <h5>{{room.id}} - {{room.name}}</h5>
+        {% endfor%}
+    </div>
+** create a new template folder inside the app folder to store all the dfrnt applications for the app folder and the template folder in the template folder in the root directory to store the features available to all the main page of the app
+
+<a href="/room/{{room.id}}"> using the django templates, you can use oredefined tags <a href = "{% url 'room' {room.id}" %}> . the tags generates the url depending on the urls passed on the url name specified in the urls file
+
+               DEALING WITH DATABASES
+to switch from sqlite to mysql, install the pymsql libarary (pip install pymysql). in the settings.py change the DATABASES settings to DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'database_name',
+        'USER': 'db_username',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # Change if your MySQL server is hosted elsewhere
+        'PORT': '3306',  # Set port if needed, typically 3306
+    }
+}
+then iport the pymysql and add the following to allow you use the pymysql instead of the sqlitedb
+pymysql.version_info = (1, 4, 6, 'final', 0)
+pymysql.install_as_MySQLdb()
+
+now run the migrate to enable the default creating of the built in databasses
+python manage.py migrate
+Now we can create our own databases in the models.py file
+create a class and the class namme will be the table name and every istance of the class will be the data added to the table 
+  class Room(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True)
+    updated = models.DateTimeField(auto_now= True) # this value will be updated any tie the class is updated and saved
+    created = models.DateTimeField(auto_now_add=True) # the time will be created only when the instace of the class is created and cannot be updated later
+
+                    USER MESSAGE CREATION
+messages = room.messages_Set.all()  -  the line of code is retrieving all messages associated with a particular room using the reverse relation. After this line is executed, the variable messages will contain a QuerySet of all messages related to the specified room . views.py room function
+pass the messages to the context dictionary then you can access all the elements of the message model from the django template
+{{message.created}} -  prints the full date when it was created instead of showing like created at
+{{message.created|timesince}} -  this now prints like 20hrs , 10 minutes instead of showing the whole date
+    room_messages = room.messages_set.all().order_by('-created') -  this orders the messages to the most recently created 
+     
+     CREATING A USER COMMENT FORM TO ALLOW USER CREATE A COMMENT
+room.html -> create a form that takes the user message with the name='body' because in the Message model the name was set to body. to restrict only the logged in user to access the messages then add the following 
+{% if request.user.is_authenticated %} form... {% endif %} 
+the form will send a post request to the view.py -> room function. now process the data sent to the user in the room function
+if request.method == 'POST':
+  message = Message.objects.create(
+    user = request.user,
+    room= room,
+    body = request.POST.get('body')
+  )
+  return redirect('room' , id=room.id)
+ # this creates an instance of the room that updates the room and when the user is redirected to the room the room is updated 
+
+                   PARTICIPANTS IN A ROOM
+in the participants section its a many to many relationship where a user can have more than one room and a room can have multiple users and a user can also be involved in many rooms
+add a participants section to the right of the screen
+in the model.py Room model, add a participants 
+participants = models.ManyToManyField(User , related_name = 'participants' , blank=True) .  the blank=true is used to tell the db that the field can be left blank when an instance of the model us created. after saving the newly added model feature then you need to run the migration to apply the changes
+python manage.py makemigrations ----- python manage.py migrate then the changes will be applied and you can check the changes on the admin panel. if you go any room now a participants section is added to the fields
+in the view sections you can get the participants using partisipants = room.participants.all() then after that you pass it to the context dictionary and you can access it from the html page
+     Automating to allow the user be added to the room automatically when he/she sends a message to the room
+in the views.py when the added message is processed, add the user before the user is redirected to the screen -- room.participants.add(request.user) . this adds the user as a participant and when the page is refreshed the paricipant is displayed 
+  PARTICIPANTS DELETING THEIR OWN MESSAGE
+the functionality can only occur qhen a user is logged in
+in the views file create a new file function that takes the id as an input and call a message.delete to delet ethe messages and then on the home file first ccheck if the user.message == request.user then display to the scren the delete option . that is the user that created the message is the user that can delete the message
+
+    CREATING AN ACTIVIT FEED SECTION WITH THE RECENT ACTIVITIES TO THE left
+create a new div inside the home page with a 1fr that holds the recent activity section
+create a new variable room_messages in the home oage that takes all the messages in the room 
+room_messages = Messages.objects.all() then pass sthe messages to the context dictionary and now you can render them to the home page, screen
+{for message in room_messages}
+ <p> {{message.user}} {{message.created|timeslice}} </p> 
+{endfor}
+this is done in the participants section and it shows the recent activites if those who sends messages and it orders them 
+add the class Meta and the ordering in the section as in the ordering = ['-created' , '-update'] in the section
+add a p in the home file to create a field that shows replied to , 
+<small> replied to {{message}}</small>
+<div>
+        <h2>Recent Activities</h2>
+        <hr> {% for message in room_messages %}
+        <small>@{{message.user}}  {{message.created|timesince}}</small>
+        <small> replied to {{message.room}} </small>
+        <p> {{message}}</p> {% endfor %}
+    </div>
+    Now the activity bar has some of the replies made and who replied to them and when
+adding a delete funtioanality in the activity feed section to make the user delete messages from the section 
+{% if request.user == message.user %}
+        <a href="{% url 'delete-message' message.id %}"><small>Delete-message</small></a> {% endif %} the user 
+
+add the filter function to be able to work also for the activity feed section 
+room_messages = Messages.objects.filter(Q(room__name__icontains = q)) -->in the views.py home function
+
+CREATING AN ACTIVITY TEMPLATE THAT CAN BE REUSED 
+for example when you check the profile of a specific user then you can see all the activities he/she has been invovled in , the messages, the room he or she is in and the ones he has taken part in writing messages
+ 1. create activity_component.html
+ 2. add all the components that were in the activity feed section to the created html file then include the html file in the section... {% include 'index\activity_component.html' %}
+ 3. create topics_component.html then add all the div content related to the topics to the section defined then include it in the section it was included in
+ 4. create feed_component.html then add all activities thats the middle section to the defined section then include in the home.html
+          USER PROFILE
+ 1.create a profile.html thats the user profile used for the user functions and extends the main.html
+ 2. views.py create a function userProfile above the room to ender the profile page to the user
+ 3. create the url that takes a dynamic value to the user 
+ 4. in the feed_component file, in the host section add a tag to make the tag clickable and redirect the user to the user-profile page   
+        <a href="{% url 'user-profile' room.host.id }">@{{room.host.username}}</a> npw when one clicks the host the host id redirected to the user profile page
+        def userProfile(request , pk):
+   user = User.objects.get(id=pk)
+   context = {'user':user}
+   return render(request , 'index/profile.html' , context)
+
+get all the rooms the user is in the views function  
+rooms = user.room__set.all() -getting all the child classes of the rooms under the user 
+pass it in the context dictioanary 
+the profile page contains three sections , topics , feed and the recent activities section
+        the feed_component section
+add the sections in the profile page 
+<div>
+
+        {% include 'index/topics_component.html' %}
+    </div> thats the feed_component section that is passed to the screen. the coponent will only display the rooms that are registered under the user because the 
+in the feed_Component file it iterates over the rooms as the rooms were set and in both the home and the userProfile view function hence all of them can be iterable
+        the activities section
+the activities section should also be filtered to show the user the activites perfomed by the user .
+same to the activity feedd section as created earlier, the variable should be named room_messages to allow for easy iteration when the messages are iterated without repetition
+views.py def userProfile: ->
+  room_messages = user.messages_set.all()
+this shows all the messages sent by a user at any time and the rooms where the user is present in 
+wrap all the other users in the activity feed with an a tag and add the links tothe user profile page
+the href should  be a href="{% url 'user-profile' message.user.id %}" this makes the username clickable and redirects the user to the userpage
+
+
+               STATIC FILE CONFIGURATIONS
+all the css javascripts files are the ones refered to as the static files
+create a new static folder to contain the css, js, images in the root directory . in the images folder, add a folder named styles then add a folder named images 
+in the styles.css add the main.css 
+you have to make the project aware of the static folder. 
+settings.py -> add the following STATICFILES_DIRS =[
+  BASE_DIR / 'static'
+]
+this makes the project aware of the static folder
+creat a main.css file and add the styles in the file then link the css file to the head section
+main.html -> load the static files before linking the csss files to teh head section
+{% load static %}
+in the href, add the line below to specify the folder that should be called
+href="{% static 'css/main.css' %}"
+this makes the styling to be applied in all the children classes of the templates 
+        ADDING IMAGES TO THE project
+
+add a new image to the image folder. add the image to the html file
+<img  src="{% static 'images/first16.jpg' %}" />
+
+fixing the create a room section to auto make the person that creates the room / the person logged in to be the room host instead of selecting the room host from a group of hosts
+
+    Fixing the create a room form 
+in the forms.py , in the roomform, exclude the host and the participants that are added in the model section
+add the following line in the roomform
+exclude = ['host' , 'participants'] after adding the file above, the host and the participants wont appear in the crete form section
+processing the user to become the backend 
+  in the createRoom views , create an instance of the saved room by
+   room = form.save(commit=False) # the commit=False tells django not to save the instance of the data recieved first and give you the data to make some additions 
+   room.host = request.user
+   room.save
+
+this processes the created form and updates the new form adding the section the host as the one who created the room
+
+                 THEME INSTALLATIONS
+Thees are just the static files created in the basic  html files and te backend developers jus have to change a few things to allow for rendering the backend to the screen 
+in your themes folder, in this case its the studyBud folder , make all the files thats the frontend and in your project directory replace the for example the home page replace it with the home.html from the themes folder and other theems that were alreayd created in the file to make the files appear in a well styled and presentable way..
+add  the styles file and make sure that you load the static before adding the styles folder to the head
+copy all the contents of the home file, and paste them in the main file then delete the main section to remvoe the main tag
+try rendering the files to the screen and it will show the home file with the original navbar
+remove the navbar from the top section and replace it in the navbar.html then include it in the home.html 
+make the file dynamic by replacing the sections that contain the dynamic data with the sections containing the data from the original file
+
+            the top right corner droppable by adding the javascript files
+drag and drop the script file from the themes folder to the newly created script folder in the static folder 
+
+implement if the user is logged in then show the logout option else if the user isnt logged in show the option to log in and display the username in the top right corner of the html Page
+
+adding the images and the logos to the html file. import thte photos to the static/images folder and render the images to the screen
+
+    MAKING THE HOME FILE dynamic
+in the container class , get rid of the topics class and paste the class to the topics components file then delete include the topics component file in the section to add all the topics in html file for rendering
+remove all the other topics leaving only one li because the for loop will be iterating through the topics rendering only the specified fields
+in the topic count section add the line
+topic.room_set.all.count
+
+          the feed component sections
+change all the sections in the below section
+         the activity feed section
+change the activity feed section
+change the profile section from the old to the new dynamic profile page
+change the room sections to display the new room and all the updates needed in the theme 
+change the create room section styling the form and adding the section to allow the user add a topic of his choice in the section
+  the create-roo form is imported and changed to the room_form and a little customization is done to make the form be able to be used as both the creation and update the form
+in the room_Form itertae through the the intput instead of adding every input field in the section
+% for field in form %}
+                    <div class="form__group">
+                        <label for="room_name">{{field.label}}</label> {{field}}
+                        <!-- <input id="room_name" name="room_name" type="text" placeholder="E.g. Mastering Python + Django" /> -->
+                    </div>
+                    {% endfor %}
+         NEW CONCEPT
+  Using an input field that already has a dropdown section
+add the input type as text,required and a list named <input required type="text" name="topic" list="topic-list">
+add a datalist field below the input to 
+<div class="form__group">
+                        <label for="room_name">Room Topic</label>
+                        <input required type="text" name="topic" list="topic-list">
+                        <datalist id="topic-list">
+                            <select name="" id="room_topic">
+                               <option value="python">Python </option>
+                               <option value="Django">Django </option>
+                            </select>
+                        </datalist>
+
+                    </div>
+to make the option values in the field be dynamic instead of being hardcoded in the field then ..
+   in the createRoom views function, get all the topics and pass them in the context dictionary then render them out in the room_form iterate through the topics using s for loop displaying each of the topics in the option values
+to make the update option also have the same procedure then add the topics in the views to render all the topics
+
+               ADDING THE TOPICS IF NOT PRESENT OR UPDATING THE TOPICS IF NOT PRESENT
+in the createRoom views function , get the topic added by the user in the userscreen 
+          topic_name = request.POST.get('topic')
+then check if the topic is present in the topics section and if not present then add the topic to the topics sections
+        topic , created = Topic.objects.get_or_create(name=topic_name)
+use  a different way to save the form after creating the above form that is using the room.object.create way
+      Room.objects.create(
+        host = request.user,
+        topic = created,
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+      )
+The update functionality in the room_form section
+the fields when the update option is called should be prefilled . in the updateRoom views.py , ....
+  1. pass the room in the context dictionary to allow rendering to the screen 
+  2. go to the room_form .html and add a value = "{{room.topic.name}}" this pre fills the 
+  3. change how to save the form such as the way it was done in the createRoom section if the request.method == post
+  4. topic , created = request.method
+
+
+                              USER EDITING THEIR ACCOUNTS
+create a html file that is incharge of updating the user account and extend the main template
+1. create a view for the update functionality in the views.py and a user must be logged in to make any update
+@login_required(login_url='login'):
+   return render(request , 'index/update_user.html')
+2.create a url for the update functionality
+**you dont need an id for the update function because the user that will be logged in is the user that will be updated
+   path('update-user, views.updateUser , name='update-user')
+3. change the link in the navbar section to redirect the user to the update-user page , change the edit profile link in the user-profile page ....
+           {% if request.user == user %}
+              <a href={% url 'update-user' %} > Edit Profile </a>
+              {% endif %}
+when youre on your account then you can update the account but when ona different users account you cant find the option to update the profile
+in the update_user.html , remove all the form_group classes and leave only one because we will be using the ModelForm for the fields
+
+   CREATE A MODELFORM FOR THE USER
+1. in the forms.py , import the user model i.e from django.contrib.auth.models import User
+2. create a userForm class and pass in the modelForm ... class userForm(ModelForm):
+3.throw in the class Meta and specify which model to be used. because the user form has many fields then we have to specify the fields that we want to be displayed to the screen by the user.
+class Meta :
+  model = User
+  fields = ['username', 'email']
+  fields = '__all__' # using this displays everything from the lastlogged in time , the password logged in and all other fields
+4. in the views.py file, import the user userForm then in the updateUser function , render the form in the page that is 
+     user = request.user # get the user and store in the user value to avoid using the request.user every time
+     form = userForm(instance = user) # the instance is used to get all the fields of the user that are already created in the field/initially filled values by the user to allow for the update to be carried out successfully
+
+5. pass the form to the html file for rendering using the context dictionary 
+return render(request , 'index/update_user.html' , {'form':form})
+6. go to the template(update_user.html) and create a for loop to iterate through the form filling in the 
+    {% for field in form %} 
+    class="form__group
+      <label>{{field.label}}</label>
+      {{field}} #this displays the input option instead of hardcoding the input for each and every section
+    {% endfor %}
+7. process the form in the view file its a standard processing thats , 
+   if request.method == 'POST':
+     form = userForm(request.POST, instance=user)
+     if form.is_valid():
+      form.save()
+      redirect('user-profile') # redirect the user to the profile page once the user is done with updating the room
+
+                     FIXING THE REMAINING PARTS OF THE PROJECT
+1. in the room.html file , the write a message input field , method='POST' and add the csrf token and add the name to body because thats how it was described whhen creating the messages model
+2. from the theme folder add the delete theme to update the style of the delete theme
+3. from the theme update the login page and the update page the same way as the other pages above
+create a if and elsif statement to render the login page or the register page depending on the user registration status
+4. creating the signup page involves adding some features 
+5. loop through the form fields to output the fields to the user and add the fields 
+{% for field in form %}
+{{field.label}}
+ {{field}} # instead of the input value use the field to display the input area
+ {% endfor %}
+
+         DEALING WITH THE RESPONSIVE VERSION OF THE PAGE
+with the version if we change the screen size it has a search bar but the search bar can be used ti search for anything because it isnt set up .
+1. in the index.html file , the mobile menu class , set the method to the form to be a GET and the url to send the user back to the home page, the input name= q to allow for getting the value after the user enters the value to the screen
+2.Browse topics -- create a new template (import the template from the master folder and add it to the )
+  for the new topics page , add a new view page for it named topics page and render the topics to the page then create a url for the view you just created also update the more link and test both at the same time. the more { go to the topics_component file and update the link set the link to topics }
+3 . update all the links in the topics page eg the index page to take the user back to the home page
+4. in the topics list iterate through the list and display the topics one by one from the context dictionary passed by the user . for the all link , send the user back to the home page
+           <a href="{% url 'topics' %}" class="active">All <span>{{topics.count}}</span></a>
+   4
+5. get all the topics in the db and pass them to the user screen --- topics = Topic.objects.filter() - then pass the topics to the context dictionary
+6. in the topic , topics page when a user clicks the topic send the user back to the screen and pass the topic to the url as a get method  {% url 'home' %}?q={{topic.name}} this will display only the rooms with the name variable 
+
+SEARCHING FOR A TOPIC in the topisc folder
+This might be usefull when we have a large number of topics eg more than 100 topics.
+                
+in the topics.html page , change the input to search for topics instead of search for posts and add the name of the input to be q    <input  name="q" placeholder="Search for topics" />  the action of the form is just for the same page and the method used will be GET. the information is going to be sent back to the topicsPage
+      PROCESSING THE GET REQUEST FROM THE HTML PAGE
+in the topicsPage view process the data as shown in the processes below
+ from django.db.models import Q
+1. q = request.GET.get('q') if request.GET.get('q') != None else ''
+    # the q lookup method above is used to get the q entered by the user and if theres nothing entered by the user sets the value to a blank space. if q = blank then all the topics are displayed to the user screen
+2. topics = Topic.objects.filter(
+  name__icontains=q
+)
+ #checks if theres a topic with the values entered by the user from the above processes and when a user clicks on the topic it takes the user back to the page where all the rooms under the topic are displayed 
+ pass the topics in the contect dictionary
+
+       LIMITING THE NUMBER OF TOPICS THAT CAN BE DISPLAYED TO THE USER SCREEN
+in the home view file , after the topics that are rendered to the screen then just like limiting the items in a list to be dispplayed then you can use the method below
+  topics = Topic.objects.all()[0:5] #only displays the first 5 elements in the screen when you click on more then all the topics are displayed to the user in the screen
+
+
+                          RECENT ACTIVITIES ON THE MOBILE VERSION
+bring in the activity component file from the themes folder and add it to the section
+create a view for the file and a url
+   def activityPage(request):
+     return render(request , 'index/ativity.html')
+
+query the db to get all the messages and pass them in the context dictioanary
+add the link to the home page. after that change the elements in the page to make the website dynamic 
+remove one of the activities-box class anad iterate through the messages and add the features. an alternative is to remove the entire components and add take from the components feature the for loop since its also an activitis components class and add it to the section
+    
+
+            CREATING AN API FOR OUR WEBSITE USING THE REST FRAMEWORK
+1. create a new folder(api) in the index app and create a __init__.py file in the app . this is important to allow for importing of packages from the directory
+2.create a urls.py file for the api folder 
+3.create a views.py for the api folder 
+4.craete a serializers.py file in the api folder 
+
+   working with the files 
+views.py - > when someone goes to our url then we need to repond with some JSON data hence we need to import the JSONResponse from the django.http import JSONResponse
+ Json is just a format of how we can represent data it stands for Javascript ObjectNotation
+step1: views.py
+       create a function based view def getRoutes(request):   # the function returns all the views 
+         def getRoutes(request):
+            routes = [
+              # people makes request to be able to use the api of our website to be able to display all the rooms in our website to their websites , then create a url that when they access then they can access all the rooms from the website 
+              'GET /api' , # thats the home page of the api
+              'GET /api/rooms' , # the url returns alll the rooms in our website 
+              'GET /api/rooms/:id' # the url returns a specific id to the user . for example when you have a project but want to send anyone interested to see your room and all the participants then you can use the room api url to get the specfic room and display it to to your website
+            ]
+            return JSONResponse(routes , safe=False) # the JSONResponsereturns the routes and setting the safe to false shows that you can return not only the python list, dict but also lists from other languages
+            safe=false turns the python list to a json list/format hence accessible by other lists
+step2: urls.py
+      to create a url for our views then we need to import the path from urls and the views from the folder that we are in
+       from django.urls import path
+       from . import views
+       urlpatterns = [
+         path('' , views.getRoutes),
+       ]
+step3: Make the main project aware of the urls in the api folder
+   in the main projects the urls.py file , add the path to the apis urls
+       path('api/', include(index.api.urls) ) 
+NOTE: at this point when you pass the api/ url to the screen then a list of routes will be displayed to the screen this is now the JSONResponse and anybody can now make a response to the data 
+
+    USING THE DJANGO REST FRAMEWORK TO MAKE THE API WORK 
+pip install djangorestframework -- install the framework
+in the settings.py -> installed APPS add the 'rest_framework'
+
+   BUILDING THE URLS BASED OF THE DJANGO REST FRAMEWORK 
+On a step by step guide on how to work with the framework follow the restFrame work documentation from the python official website
+when working with the rest framework then theres no need to use the JSONResponse but we can use the restframework response
+1. views.py 
+  from rest_framework.decorators import api_view # this allows us to work with the function based views
+  from rest_framework.response import Response #now we can give responses to the user
+   
+   Add a decorater to the view file and specify the http methods that can be passed
+   @api_view(['GET']) # you can add other methods such as the POST  .. ['GET' , 'POST' , 'PUT']
+
+   change the response from a jsonresponse to a response as we imported the response from the rest_framework
+   return Response(routes) 
+this now returns the page with the methods that are accepted , the data format etc...
+
+2. views.py
+create a new view to get all the rooms and display them to anyone who needs to access them through the apis.
+   def getRooms(request):
+import the models from the base folder and query the db to get all the rooms, store in a room variable. before perfoming this you need to add the decorater because you are working with the rest_framework.
+  from index.models import Room
+  def getRooms(request):
+    @api_view(['GET'])
+    rooms = Room.objects.all()
+    return Response(rooms)
+
+  create a url for the rooms view
+   path('rooms/' , views.getRooms)
+After the url is created then try out accessing the url. there will be an error indicating Object of type Room is not JSON serializable , this is because we are making a python list thats a queryset  but objects cannot be converted automatically when passing data . in the previous url , the dictioanary passed was able to be conerted automatically when passing the data
+
+Using the serializable.py file we can be able to convert the python objects to be in a JSON format and thus we can access the files from different places
+
+3. serializers.py
+it basicaaly imports the serializer , create a class , specify the class that we want to serializer
+a. import the modelSerializer and the model to serializer
+   from rest_framework.serializer import modelSerializer
+   from index.models import Room
+b. create a class that handles the serializer of the specific model. declare a meta class inside the model class and specify the model name and the fields as all the fields that can be used to take the fields 
+  class RoomSerializable(modelSerializer):
+    class Meta:
+      model = Room
+      fields = '__all__'
+
+what the RoomSerializer class does is it takes all the input fields from the Room model and turns them into a JSON object
+now that we have our serializer we need to import the RoomSerializer in the views.py file ,create a variable called the serializer in the getrooms function and pass the rooms file in the serializer and pass the serializer as the response to the rooms. 
+  from .serializers import RoomSerializer
+    def getRooms(request)
+      serializer = RoomSerializer(rooms , many=True) # we set the many to true because there are multiple fields to bea dded to be passed from the room file
+      return Response(serializer.data)
+
+after adding the above then the data will be displayed as JSON objects to anybody trying to access the apis urls
+ making the api for a single room instead of all the rooms
+ a. create a funcion as shown below 
+    def getRoom(request , pk):
+    room = Room.objects.get(id=pk)
+    serializer = RoomSerializer(room)
+    return Response(serializer.data)
+
+     create a url for the room that takes a dynamic value as the id and displays the value
+
+Thats all for the api we just created 
+         TESTING THE API CREATED AND A TEST CASE USE OF THE API
+create a new html file outside our projects and we are going to get the data using javascript
+the functionality involves using javascript to perfom the operations
+to allow your web perfom the apis functionality then you must install a third party package called django-cors-header then in the instaled apps add the 'coreheaders' and add the cors middleware in the settings.py MIDDLEWARE AND add the cors add origin to allow all the urls to access the urls that is CORS_ALLOW_ALL_ORIGIN = True
+
+         WORKING WITH THE USER-MODEL IN DJANGO
+the user model will contain values like user authentication, the profile and links to other profiles 
+1.cerate a new django project from scratch
+2. django alreaday has a built in user model but we are going to create a new userModel that will inhert from the built in userModel
+3. in the django.contrib.auth. users import AbstarctUser ==== in the models.py -- index app
+4. create a new class in the models.py that inherits the AbstarctUser and tell django you want to use the model created instead of the original django userModel
+  a. Class User(AbstarctUser):
+  b. Settings.py -> create a new variable called the  
+      AUTH_USER_MODEL = 'index.User' #this line tells django to use the user model as the authentication model instead of the inbuilt default model
+5. run the migrations in the project to create the database and the default User model created .
+after running the migrations then create a super user 
+6. admin.py -> register the user to the admin panel since we created our Own user model
+    from .models import User 
+    admin.site.register(User)
+    # without registering the user to the admin then the user wont be displayed in the admin panel
+7.NOTE : the user will not be displayed under the user authentication but under the Index section this is because we created our own user model and we must add our own user authentication method to make the authentication work
+
+  CUSTOMIZING THE FIELDS IN THE USER MODEL 
+1.Creating the funtionality to allow a user login with an email instead of logging in with a username each and every time 
+  a. in the models.py , add the fields that you want to be displayed when the user tries to login
+     class User(AbstarctUser):
+       name = modes.CharField(max_length=200 , null=True)
+       email = models.CharField( unique)
+       bio = models.TextField(null=True)
+
+       USERNAME_FIELD = 'email' # THIS tells django that the email should be the one used to log the user in the fields instead of the usernames
+
+                 CUSTOMIZING THE USER MODEL IN THE MAIN PROJECT
+1.delete all the migrations in the database that we created
+2. comment all the models in the models.py to make the project assume that the models have never been created 
+3. remove or comment the from django.contrib.auth.models import  User to because we will not be using the default user Model but the built in models
+4. Now create a new User model just as in the previous new project we created
+ models.py 
+   class User(AbstarctUser):
+     
+This basically states that we have created a new database but with a user model of our own as opposed to the previous project where the user model was built in 
+
+5.create a superuser after running the migrations again and log in to the django/admin panel. if there are no rooms then the setup process was successfull
+6.register the user in the admin panel thats in the admin.py 
+ when you try accessing the user in the admin panel then the created user will appear 
+7. in the views.py file, remove the line from django.contrib.auth.models import Users and add the Users model in the from. models import Room,Users...
+8. in the models.py change the login fields to make the email appear instead of the username 
+ class User(AbstarctUser):
+       name = modes.CharField(max_length=200 , null=True)
+       email = models.CharField( unique)
+       bio = models.TextField(null=True)
+  now the user also has an option of writing his bio thats will be displayed on the user profiles page
+
+  ADDING THE USER PROFILE PICTURE TO THE PAGE
+in the models.py User class add the avatar=models.ImageField() thats the user image 
+In django image processing involves a third party library called pillow and it must be installed for the image to be processed
+in the models.py class User() add
+   avatar = models.ImageField(null=True , default="avatar.svg") #this sets a default image when the user hasnt uploaded the image when creating the avatar
+
+  in the terminal , run python -m pip install pillow
+
+     HANDLING USER UPLOADED content
+you need to tell django about the image you just uploaded, where to store it and how to retrieve and display the stored image
+1. in the settings.py , 
+      1. MEDIA_ROOT = BASE_DIR / 'static/images'
+        # for the images uploaded, add the images to the images folder in the static folder
+      2. MEDIA_URL = '/images/'
+         # for all the images url, they will be prefixed with the images
+2. add access to the urls we created in the settings.py file
+  in the meccollege -> urls.py ,  
+     1.from django.conf import settings
+     2.from django.conf.url.static import static
+     #create a new url and instead of adding the url path to the available urlpatterns create a new urlpattern and add it to the urlpatterns available through the following process below
+     3. urlpatterns += static(settings.MEDIA_URL , document_root=MEDIA_ROOT) #set the URL to MEDIA_URL and get the files from the storage MEDIA_ROOT thats the storage for the pages
+     #setting the file path to MEDIA_URL from the settings.py file which the MEDIA_URL is the images folder
+     4. python manage.py makemigrations
+     5. python manage.py migrate # the migrations allow the changes made to the models appear
+3. add images in the admin panel to display 
+4. in the html templates anywhere with the image tag and the avatar.svg add the {{room.host.avatar.url}}
+      {{request.user.avatar.url}}
+    #this displays the user images on the FIELDS
+
+5 updating the user update form to include the user PICTURE
+    1. in the forms.py file, add 
+        from django.contrib.auth.forms import UserCreationForm
+        class UserForm(ModelForm):
+           class Meta:
+            model = User
+            fields = ['username','name','email','bio','avatar', ']
+    2. in the update.html in the form add enctype="multipart/form-data"
+       this tells the html page that we are also submitting files with this form and not just content
+    3. in the update-user views.py add the line the command to allow user include the files also
+       form = UserForm(request.POST , request.FILES , instance=user )
+
+6 updating the user register form to include the user avatar
+   1.in the forms.py create a new class  that inherits from the UserCreationForm
+     class MyUserCreationForm(UserCreationForm):
+       class Meta:
+         model = User
+         fields = ['name','username','email','password1','password2']
+    2. in the views.py remove the UserCreationForm and from forms import the user MyUserCreationForm thats to be used
+      in the register function change the UserCreationForm for all the instances to MyUserCreationForm
+
+7. Updating the Login page to display the email instead of the username during the login
+  1. in the login_register.html change the label to email instead of username and add change the name to email
+  2. in the views.py , the login page, change the username to email and the names also to email
+
+
+                                DJANGO SIGNALS
+
+Signals are used to perfom some action on the creation/modificication of a model instance . for example create a user profile when the user registers , create a stadings table when a team us regustered
+3 types of Signals :
+   1.  pre_save/post_save: This signal works before/after the method save().
+   2.pre_delete/post_delete: This signal works before after deleting a model’s instance (method delete()) this signal is thrown.
+   3. pre_init/post_init: This signal is thrown before/after instantiating a model (__init__() method).        
+
+example implementation of a user and a profile . when a user is created the profile is also created
+in the models.py create a profile model 
+from django.db import models
+from django.contrib.auth.models import User
+   class Profile(models.Model):
+      user = models.OneToOneField(User , on_delete=models.CASCADE, blank=True , null=True)
+      first_name = models.CharField(max_length=200,null=True,blank=True)
+      last_name = models.CharField(max_length=200,null=True,blank=True)
+      phone_number = models.CharField(max_length=200,null=True,blank=True)
+      def __str__(self):
+         return self.first_name
+using django signals we want to create a functionality where when a user is registered the profile is automatically created.
+                Creating Django signals
+NOTE :: the signal is fired off anytime the save method is called in the views function
+1. import the post_save and post_delete from the signals package
+        from django.db.models.signals import post_save , post_delete
+2. define a function createProfile thats will be used to create the profile when user is registered
+        def createProfile(sender , instance, created , **kwargs):
+    sender - the model thats sends the signal in this case the user model
+    instance - the instance of the class model , the user created
+    created - A boolean indicating whether the instance was created (True) or updated (False)
+    kwargs -  the additional keywords that was passed along with the signal
+3.add the condition that checks if the signal was created or when the instance was updated. if it was created(TRUE) then proceed
+    if created:
+      instance = user
+4.create a profile if the process was created
+    profile = Profile.objects.create(
+      user=user
+      username = user.username
+      #once the process is created then you can add all the other fields of the profile model below
+      email = user.email
+    )
+5.connect the createProfle with the sender using the post_save
+   post_save.connect(createProfile, sender=user)
+Now  when a new user is created then the profile will be automatically created 
+Heres the complete function of the signals above
+            from django.db.models.signals import post_save
+            from django.contrib.auth.models import User
+            def createProfile(sender , instance, created , **kwargs):
+                  if created:
+                    instance = user  
+                    profile = Profile.objects.create(
+                      user=user
+                      username = user.username
+                      #once the process is created then you can add all the other fields of the profile model below
+                      email = user.email
+                    ) 
+                  post_save.connect(createProfile, sender=user)
+                     Making the signals to be in one file of its own
+1.in the base directory create a signals.py then import all the models, dispatch, and the post_reciever
+      from .models import Team , Standings
+      from django.contrib.auth.models import post_save
+      from django.dispatch import receiver
+2.add all the signal functions from the models file to the signals.py file
+      ##all the functions goes below
+3. Configure the signals in the apps config file (apps.py)
+  1.overwrite the ready() method by defining a new function in the BaseConfig class
+       def ready(self):
+          import base.signals
+4.Now all the django signals when added to the signals file will work as expected
+ 
+ 
+                                 USER BASED PERMISSIONS IN DJANGO AND DECORATERS
+to allow create and admin and a customer functionality in django. for example in an online store , the customers page being dfrnt from the admins page.
+A Decorater is a function that takes in another function as an argument
+1.create a new file decoraters.py file in the app
+2.import the permissions module from django-guardian
+       from django.shortcuts import redirect
+       from django.http import HttpResponse
+3.create a function that handles all the unauthanticated user . the func takes in a function from the views as its argument. Define another function inside the function that takes the request,arguments and the keyword arguments as the parameters and checks if a user is authenticated and returns the login page if a user isnt authenticated
+       def unauthenticated_user(view_func):
+          def wrapper_func(request , *args , **kwargs):
+             if request.user.is_authenticated:
+                return redirect('home')
+             else:
+                return view_func(request , *args , **kwargs)
+          return wrapper_func
+4. in the views.py file, import the decorater from the decoraters file.
+      from .decoraters import unauthanticated_user
+5. now any file that you need to set a restirction to be accesed by the unauthenticated users only you can add the decorater unauthanticated_user . eg someone logged into the website cannot access the register and the login page
+       @unauthanticated_user
+       def loginPage(request):
+           ...
+          DJANGO ADMIN PERMISSIONS , WEBSITE ADMIN AND WEBSITE customers
+1. in the admin panel, create a group , admin and another group customers and add user to each .
+2. in the decoraters file, crate a function allowed_users and inside the allowed_users add a function decorater , then another function wrapper_func
+      def allowed_users(allowed_roles=[]): #takes a list of users as the input
+         def decorater(view_func): # the function that the decorater will be applied 
+             def wrapper_func(request , *args , **kwargs):
+
+                group = None
+                if request.user.groups.exists()
+                   group = group.request.user.groups.all()[0].name
+
+                if group in allowed_roles:
+                   return view_func(request , *args , **kwargs)
+                else:
+                return HttpResponse("You arent allowed in this page)
+
+                
+             return wrapper_func
+         return decorater 
+3. Now inside thet wrapper_func the comditions to be checked before the function is called will be applied
+4 in the views.py , add the decorater above the function that you want to restrict and add the allowed_roles parameter to the decorater ie @allowed_users(allowed_roles=["league_admin"])
+MAKING THE OPTION TO REGISTER AS AN ADMIN OF THE WEBSITE 
+This helps us theres no need to add the admin role to the webpage through the django adamin panel
+1.in the views.py , import the group model 
+    from django.contrib.auth.models import Group
+2. in the registerPage, query the group
+    group = Group.objects.get(name='customer')
+    user.groups.add(group)#creates an instance of the group o registration and adds the user to the customer
+
+NOTE:the user must be first saved before trying to add the user to the database with a commit=False to prevent it from being written to the database 
+   if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            
+            user.save()
+
+            group = Group.objects.get(name='players')
+            user.groups.add(group)
+Now when a user is registered to the website the user is added to the group players 
+                           CHANGING A USER ROLE FROM A PLAYER TO AN ADMIN
+1.create a change_role.html that takes in the email of the user that needs to be changed from a player to an admin
+2. add the functionality to the admin page , i.e the page that can only be viewed by the admin. to do this, 
+    1. query the Group model to get all the users from the respective group
+        from django.contrib.auth.models import Group
+        group =Group.objects.filter(name="admin") #admin is the name of the group
+        group_users = group.user_set.all() #using the user_set to get all the instances of the specific group
+    2. pass the groups in the context dictionary for rendering in the page
+        in the html file, check if the request.user is among the admins in the league_admin group
+         {% if request.user in group_users %}
+    <h3>
+        <a href="{% url 'adminsPage' %}" class="navbar-link">Admins Page</a>
+    </h3>
+    {% endif %}
+    to make the url unnaccessible to any other user who tries to pass the url to the browser url , 
+      1. you can use the DECORATERS created before 
+          @allowed_users(allowed_roles=['league_admin']) #this makes the function only accessible by the league_admins
+      2. you can query the group users and check if the request.user is not among the group then return the user back to the home page
+3.check if the email is among the registered players.
+   1. check the request method and get the username entered in the form
+   from django.http import HttpResponse
+      if request.method == 'POST':
+         email = request.POST.get('email)
+        
+   2. under the if condition, query the db to try and get the email if not available then throw an HttpResponse eceptions
+         try:
+           user = User.objects.get(email='email')
+          except:
+           HttpResponse('the user doesnt exist among the users')
+ 
+   3.check if the user is in the players group and  if the user exists then remove the user from the players group 
+      player_group = Group.objects.get(name='players')#retrieves the group objects associated with the name players 
+      if player_group not in users.player.all(): #checks if the player group is not in the lists of the groups that the user is associated to 
+         return HttpResponse("the player isnt registered under the players groups")
+   4. remove the user from the players group and add the user in the league_admin group
+       user.groups.remove(player_group)
+       
+       league_admin_group = Group.objects.get(name='league_admin') #retrieve the league_admin
+       user.groups.add(league_admin_group) #add the user to the league_admin as an admin
+
+
+ 
+                                MANAGEMENT COMMANDS IN DJANGO
+Management commands fir example can be used to schedule tasks. for example , 
+  1.you have an application where you need to go to a particular website and after every 10 seconds scrape some data off the website and return the data scrapped to your website and store it in the database.
+  2.generate daily reports from your website and automatically email the reports . 
+                          WORKING WITH COMMANDS IN DJANGO
+1. create a new app for the learning purpose
+
